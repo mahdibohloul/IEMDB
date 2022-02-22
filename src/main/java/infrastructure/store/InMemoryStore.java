@@ -12,6 +12,10 @@ public class InMemoryStore<T, ID> {
         store = new HashMap<>();
     }
 
+    public InMemoryStore(Map<ID, T> store) {
+        this.store = store;
+    }
+
     public void put(ID id, T value) {
         store.put(id, value);
     }
