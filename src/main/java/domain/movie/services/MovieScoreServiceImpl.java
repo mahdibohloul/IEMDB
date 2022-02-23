@@ -1,53 +1,47 @@
 package domain.movie.services;
 
-import domain.movie.exceptions.InvalidRateScoreException;
-import domain.movie.exceptions.MovieNotFoundException;
-import domain.movie.models.MovieScore;
-import domain.movie.pubsub.events.MovieScoredEvent;
-import domain.movie.repositories.MovieScoreRepository;
-import domain.user.exceptions.UserNotFoundException;
-import domain.user.services.UserService;
+import java.util.stream.Stream;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Stream;
+import domain.movie.exceptions.InvalidRateScoreException;
+import domain.movie.models.Movie;
+import domain.movie.models.MovieScore;
+import domain.movie.pubsub.events.MovieScoredEvent;
+import domain.movie.repositories.MovieScoreRepository;
+import domain.user.models.User;
 
 @Service
 public class MovieScoreServiceImpl implements MovieScoreService {
     private final MovieScoreRepository movieScoreRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final UserService userService;
-    private final MovieService movieService;
-    private static Integer SCORE_UPPER_LIMIT = 10;
-    private static Integer SCORE_LOWER_LIMIT = 1;
+
+    private static final Integer SCORE_UPPER_LIMIT = 10;
+    private static final Integer SCORE_LOWER_LIMIT = 1;
 
     public MovieScoreServiceImpl(MovieScoreRepository movieScoreRepository,
-                                 ApplicationEventPublisher applicationEventPublisher,
-                                 UserService userService,
-                                 MovieService movieService) {
+            ApplicationEventPublisher applicationEventPublisher) {
         this.movieScoreRepository = movieScoreRepository;
         this.applicationEventPublisher = applicationEventPublisher;
-        this.userService = userService;
-        this.movieService = movieService;
     }
 
     @Override
-    public void scoreMovie(Integer movieId, String userEmail, Integer score) throws InvalidRateScoreException, MovieNotFoundException, UserNotFoundException {
+    public void scoreMovie(Movie movie, User user, Integer score)
+            throws InvalidRateScoreException {
         validateScore(score);
-        validateMovie(movieId);
-        validateUser(userEmail);
-        if (alreadyScored(movieId, userEmail)) {
-            MovieScore movieScore = getMovieScore(movieId, userEmail);
+        if (alreadyScored(movie, user)) {
+            MovieScore movieScore = getMovieScore(movie.getId(), user.getEmail());
             movieScore.setScore(score);
             saveMoveScore(movieScore);
         } else {
             MovieScore movieScore = new MovieScore();
-            movieScore.setMovieId(movieId);
-            movieScore.setUserEmail(userEmail);
+            movieScore.setMovieId(movie.getId());
+            movieScore.setUserEmail(user.getEmail());
             movieScore.setScore(score);
             saveMoveScore(movieScore);
         }
-        applicationEventPublisher.publishEvent(new MovieScoredEvent(movieId));
+        applicationEventPublisher.publishEvent(new MovieScoredEvent(movie.getId()));
     }
 
 
@@ -71,22 +65,8 @@ public class MovieScoreServiceImpl implements MovieScoreService {
         }
     }
 
-    private void validateMovie(Integer movieId) throws MovieNotFoundException {
-        if (movieId == null) {
-            throw new IllegalArgumentException("Movie id cannot be null");
-        }
-        movieService.findMovieById(movieId);
-    }
-
-    private void validateUser(String userEmail) throws UserNotFoundException {
-        if (userEmail == null) {
-            throw new IllegalArgumentException("User email cannot be null");
-        }
-        userService.findUserByEmail(userEmail);
-    }
-
-    private boolean alreadyScored(Integer movieId, String userEmail) {
-        return movieScoreRepository.findByUserEmailAndMovieId(userEmail, movieId) != null;
+    private boolean alreadyScored(Movie movie, User user) {
+        return movieScoreRepository.findByUserEmailAndMovieId(user.getEmail(), movie.getId()) != null;
     }
 
 }

@@ -15,5 +15,6 @@ public interface MovieService {
     void addComment(Movie movie, String text, User user) throws MovieNotFoundException;
 
     Stream<Movie> searchMovies(List<Integer> ids, List<String> names, List<String> directors, List<String> writers,
+            List<String> genres,
             Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt);
 }

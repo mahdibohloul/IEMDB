@@ -40,22 +40,30 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public Stream<Movie> searchMovies(List<Integer> ids, List<String> names, List<String> directors,
-            List<String> writers, Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt) {
+            List<String> writers, List<String> genres, Double imdbRateGt, Double imdbRateLt,
+            Integer ageLimitGt, Integer ageLimitLt) {
         Stream<Movie> movies = store.getAll().stream();
-        if (ids != null && !ids.isEmpty()) {
+        if (ids != null) {
             movies = movies.filter(movie -> ids.contains(movie.getId()));
         }
-        if (names != null && !names.isEmpty()) {
+        if (names != null) {
             movies = movies.filter(movie -> names.stream().anyMatch(name -> movie.getName().equalsIgnoreCase(name)));
         }
-        if (directors != null && !directors.isEmpty()) {
+        if (directors != null) {
             movies = movies.filter(
                     movie -> directors.stream().anyMatch(director -> movie.getDirector().equalsIgnoreCase(director)));
         }
-        if (writers != null && !writers.isEmpty()) {
+        if (writers != null) {
             movies = movies.filter(
                     movie -> writers.stream()
                             .anyMatch(writer -> movie.getWriters().stream().anyMatch(mw -> writers.stream().anyMatch(
+                                    mw::equalsIgnoreCase)))
+            );
+        }
+        if (genres != null) {
+            movies = movies.filter(
+                    movie -> genres.stream()
+                            .anyMatch(genre -> movie.getGenres().stream().anyMatch(mw -> genres.stream().anyMatch(
                                     mw::equalsIgnoreCase)))
             );
         }
@@ -71,6 +79,7 @@ public class MovieRepositoryImpl implements MovieRepository {
         if (ageLimitLt != null) {
             movies = movies.filter(movie -> movie.getAgeLimit() < ageLimitLt);
         }
+
 
         return movies;
     }
