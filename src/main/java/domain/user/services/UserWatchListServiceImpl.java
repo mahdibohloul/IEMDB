@@ -33,10 +33,10 @@ public class UserWatchListServiceImpl implements UserWatchListService {
     }
 
     @Override
-    public void removeFromWatchList(User user, Movie movie) throws MovieNotFoundException {
-        UserWatchList userWatchList = userWatchListRepository.findByUserEmailAndMovieId(user.getEmail(), movie.getId());
+    public void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException {
+        UserWatchList userWatchList = userWatchListRepository.findByUserEmailAndMovieId(user.getEmail(), movieId);
         if (userWatchList == null)
-            throw new MovieNotFoundException(movie.getId());
+            throw new MovieNotFoundException(movieId);
 
         userWatchListRepository.delete(userWatchList);
     }

@@ -1,5 +1,7 @@
 package domain.actor.models;
 
+import java.util.Date;
+
 import infrastructure.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class Actor extends BaseEntity {
     private String name;
-    private String birthDate;
+    private Date birthDate;
     private String nationality;
 }

@@ -53,9 +53,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Stream<Movie> searchMovies(List<Integer> ids,
             List<String> names, List<String> directors, List<String> writers,
-            Double imdbRateGt, Double imdbRateLt,
+            List<String> genres, Double imdbRateGt, Double imdbRateLt,
             Integer ageLimitGt, Integer ageLimitLt) {
-        return movieRepository.searchMovies(ids, names, directors, writers, imdbRateGt, imdbRateLt, ageLimitGt,
+        return movieRepository.searchMovies(ids, names, directors, writers, genres, imdbRateGt, imdbRateLt, ageLimitGt,
                 ageLimitLt);
     }
 

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public interface UserWatchListService {
     UserWatchList addToWatchList(User user, Movie movie) throws MovieAlreadyExistsException, AgeLimitErrorException;
 
-    void removeFromWatchList(User user, Movie movie) throws MovieNotFoundException;
+    void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException;
 
     Stream<UserWatchList> getUserWatchList(User user);
 }

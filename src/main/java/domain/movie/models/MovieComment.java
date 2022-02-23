@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MovieComment {
-    public Integer movieId;
-    public Integer commentId;
+    private Integer movieId;
+    private Integer commentId;
 }

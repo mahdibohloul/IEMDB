@@ -4,6 +4,7 @@ import infrastructure.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -15,13 +16,13 @@ public class Movie extends BaseEntity {
 
     private String name;
     private String summary;
-    private String releaseDate;
+    private Date releaseDate;
     private String director;
     private List<String> writers;
     private List<String> genres;
     private List<Integer> cast;
     private Double imdbRate;
-    private String duration;
+    private Integer duration;
     private Integer ageLimit;
     private List<MovieComment> comments;
 

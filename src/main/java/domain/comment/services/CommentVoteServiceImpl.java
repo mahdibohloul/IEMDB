@@ -8,6 +8,8 @@ import domain.comment.valueobjects.VoteType;
 import domain.user.models.User;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Stream;
+
 @Service
 public class CommentVoteServiceImpl implements CommentVoteService {
     private final CommentVoteRepository commentVoteRepository;
@@ -23,5 +25,10 @@ public class CommentVoteServiceImpl implements CommentVoteService {
         commentVote.setUserEmail(user.getEmail());
         commentVote.setType(VoteType.fromInt(vote));
         return commentVoteRepository.save(commentVote);
+    }
+
+    @Override
+    public Stream<CommentVote> findAllByCommentId(Integer commentId) {
+        return commentVoteRepository.findAllByCommentId(commentId);
     }
 }

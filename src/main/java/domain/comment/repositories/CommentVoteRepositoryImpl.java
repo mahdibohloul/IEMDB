@@ -4,6 +4,8 @@ import domain.comment.models.CommentVote;
 import infrastructure.store.InMemoryStore;
 import org.springframework.stereotype.Repository;
 
+import java.util.stream.Stream;
+
 @Repository
 public class CommentVoteRepositoryImpl implements CommentVoteRepository {
     private final InMemoryStore<CommentVote, Integer> store = new InMemoryStore<>();
@@ -32,5 +34,10 @@ public class CommentVoteRepositoryImpl implements CommentVoteRepository {
     @Override
     public Integer generateId() {
         return store.getLastId(Integer::compare) + 1;
+    }
+
+    @Override
+    public Stream<CommentVote> findAllByCommentId(Integer commentId) {
+        return store.getAll().stream().filter(commentVote -> commentVote.getCommentId().equals(commentId));
     }
 }

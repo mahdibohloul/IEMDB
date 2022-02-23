@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 import domain.actor.models.Actor;
 import infrastructure.store.InMemoryStore;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 @Repository
 public class ActorRepositoryImpl implements ActorRepository {
     private final InMemoryStore<Actor, Integer> store = new InMemoryStore<>();
@@ -34,5 +37,14 @@ public class ActorRepositoryImpl implements ActorRepository {
     @Override
     public Integer generateId() {
         return store.getLastId(Integer::compare) + 1;
+    }
+
+    @Override
+    public Stream<Actor> searchActors(List<Integer> ids) {
+        Stream<Actor> actorStream = store.getAll().stream();
+        if (ids != null) {
+            actorStream = actorStream.filter(actor -> ids.contains(actor.getId()));
+        }
+        return actorStream;
     }
 }
