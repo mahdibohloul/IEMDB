@@ -1,5 +1,6 @@
 package domain.user.services;
 
+import domain.user.exceptions.DuplicateUserEmailException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,10 +32,18 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("should insert user with success")
-    void should_insert_user_with_success() {
+    void should_insert_user_with_success() throws DuplicateUserEmailException {
         User user = podamFactory.manufacturePojo(User.class);
         Mockito.when(userRepository.save(user)).thenReturn(user);
         assert userService.insertUser(user).equals(user);
+    }
+
+    @Test
+    @DisplayName("should throw exception when user email is duplicated")
+    void should_throw_exception_when_user_email_is_duplicated() {
+        User user = podamFactory.manufacturePojo(User.class);
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        Assertions.assertThrows(DuplicateUserEmailException.class, () -> userService.insertUser(user));
     }
 
     @Test
