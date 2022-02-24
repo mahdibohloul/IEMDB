@@ -33,6 +33,6 @@ public class InMemoryStore<T, ID> {
     }
 
     public ID getLastId(Comparator<ID> comparator) {
-        return store.keySet().stream().max(comparator).orElse((ID) (Integer.valueOf(store.size() + 1)));
+        return store.keySet().stream().max(comparator).orElse((ID) (Integer.valueOf(store.size())));
     }
 }
