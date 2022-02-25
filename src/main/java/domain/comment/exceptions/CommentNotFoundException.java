@@ -6,4 +6,9 @@ public class CommentNotFoundException extends IemdbException {
     public CommentNotFoundException(Integer id) {
         super("Comment with id " + id + " not found");
     }
+
+    @Override
+    public String toString() {
+        return "CommentNotFound";
+    }
 }

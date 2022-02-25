@@ -1,23 +1,24 @@
 package application.controllers;
 
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+
 import application.handlers.MovieHandler;
-import application.models.request.CommentRequestModel;
+import application.models.request.*;
+import application.models.response.GenericResponseModel;
 import application.models.response.MovieDetailResponseModel;
 import application.models.response.MoviesResponseModel;
-import application.models.request.MovieRequestModel;
-import application.models.request.MovieScoreRequestModel;
-import domain.movie.exceptions.InvalidRateScoreException;
-import domain.movie.exceptions.MovieNotFoundException;
+import domain.actor.exceptions.ActorNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieScoreService;
 import domain.movie.services.MovieService;
-import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.services.UserService;
-import org.springframework.stereotype.Controller;
-
-import java.text.ParseException;
-import java.util.List;
+import framework.router.commandline.exceptions.InvalidCommandException;
+import infrastructure.exceptions.IemdbException;
 
 @Controller
 public class MovieController {
@@ -35,35 +36,65 @@ public class MovieController {
         this.movieHandler = movieHandler;
     }
 
-    public void addMove(MovieRequestModel movieRequestModel) throws ParseException {
-        Movie movie = movieRequestModel.toMovie();
-        movieService.insertMovie(movie);
+    public GenericResponseModel addMove(AddMovieRequestModel addMovieRequestModel) {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            Movie movie = addMovieRequestModel.toMovie();
+            movieService.insertMovie(movie);
+            responseModel.setSuccessfulResponse("movie added successfully");
+        } catch (ParseException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException("invalid date format").toString());
+        } catch (ActorNotFoundException e) {
+            responseModel.setUnsuccessfulResponse(e.toString());
+        }
+        return responseModel;
     }
 
-    public void addComment(CommentRequestModel commentRequestModel)
-            throws MovieNotFoundException, UserNotFoundException {
-        Movie movie = movieService.findMovieById(commentRequestModel.getMovieId());
-        User user = userService.findUserByEmail(commentRequestModel.getUserEmail());
-        movieService.addComment(movie, commentRequestModel.getText(), user);
+    public GenericResponseModel addComment(AddCommentRequestModel addCommentRequestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            Movie movie = movieService.findMovieById(addCommentRequestModel.getMovieId());
+            User user = userService.findUserByEmail(addCommentRequestModel.getUserEmail());
+            Integer commentId = movieService.addComment(movie, addCommentRequestModel.getText(), user);
+            response.setSuccessfulResponse(MessageFormat.format("comment with id {0} added successfully", commentId));
+        } catch (IemdbException e) {
+            response.setUnsuccessfulResponse(e.toString());
+        }
+        return response;
     }
 
-    public void rateMovie(MovieScoreRequestModel movieScoreRequestModel)
-            throws MovieNotFoundException, UserNotFoundException, InvalidRateScoreException {
-        Movie movie = movieService.findMovieById(movieScoreRequestModel.getMovieId());
-        User user = userService.findUserByEmail(movieScoreRequestModel.getUserEmail());
-        movieScoreService.scoreMovie(movie, user, movieScoreRequestModel.getScore());
+    public GenericResponseModel rateMovie(RateMovieRequestModel rateMovieRequestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            Movie movie = movieService.findMovieById(rateMovieRequestModel.getMovieId());
+            User user = userService.findUserByEmail(rateMovieRequestModel.getUserEmail());
+            movieScoreService.scoreMovie(movie, user, rateMovieRequestModel.getScore());
+            response.setSuccessfulResponse("movie rated successfully");
+        } catch (IemdbException ex) {
+            response.setUnsuccessfulResponse(ex.toString());
+        }
+        return response;
     }
 
     public MoviesResponseModel getMoviesList() {
         return movieHandler.getMovieList(null, null, null, null, null, null, null, null, null);
     }
 
-    public MovieDetailResponseModel getMovieById(Integer id) throws MovieNotFoundException {
-        return movieHandler.findMovieById(id);
+    public GenericResponseModel getMovieById(GetMovieByIdRequestModel getMovieByIdRequestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            MovieDetailResponseModel movieDetail = movieHandler.findMovieById(getMovieByIdRequestModel.getMovieId());
+            response.setSuccessfulResponse(movieDetail);
+        } catch (IemdbException e) {
+            response.setUnsuccessfulResponse(e.toString());
+        }
+        return response;
     }
 
-    public MoviesResponseModel getMoviesByGenre(String genre) {
-        return movieHandler.getMovieList(null, null, null, null, List.of(genre), null, null, null, null);
+    public MoviesResponseModel getMoviesByGenre(GetMoviesByGenreRequestModel getMoviesByGenreRequestModel) {
+        return movieHandler.getMovieList(null, null, null, null,
+                List.of(getMoviesByGenreRequestModel.getGenre()), null,
+                null, null, null);
     }
 
 

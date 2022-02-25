@@ -10,16 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddUserWatchListRequestModel {
+public class RemoveUserWatchListRequestModel {
     private String userEmail;
     private Integer movieId;
 
     @JsonCreator
-    public AddUserWatchListRequestModel(
+    public RemoveUserWatchListRequestModel(
             @JsonProperty(required = true, value = "userEmail") String userEmail,
             @JsonProperty(required = true, value = "movieId") Integer movieId) {
         this.userEmail = userEmail;
         this.movieId = movieId;
     }
-
 }

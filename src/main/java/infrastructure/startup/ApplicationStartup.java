@@ -3,6 +3,7 @@ package infrastructure.startup;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import infrastructure.beans.ComponentsConfiguration;
+import infrastructure.runner.ApplicationRunner;
 
 //TODO make this class a singleton
 public class ApplicationStartup {
@@ -17,6 +18,16 @@ public class ApplicationStartup {
         context.refresh();
     }
 
+    public void run(ApplicationRunner applicationRunner) {
+        applicationRunner.run();
+        stop();
+    }
+
+    public void run(String applicationRunnerName) {
+        ApplicationRunner applicationRunner = (ApplicationRunner) context.getBean(applicationRunnerName);
+        run(applicationRunner);
+    }
+
     public void stop() {
         context.close();
     }
@@ -29,9 +40,4 @@ public class ApplicationStartup {
         context.register(ComponentsConfiguration.class);
     }
 
-    private void refreshApplication() {
-        while (true) {
-
-        }
-    }
 }

@@ -1,12 +1,12 @@
 package domain.actor.repositories;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Repository;
 
 import domain.actor.models.Actor;
 import infrastructure.store.InMemoryStore;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Repository
 public class ActorRepositoryImpl implements ActorRepository {
@@ -46,5 +46,10 @@ public class ActorRepositoryImpl implements ActorRepository {
             actorStream = actorStream.filter(actor -> ids.contains(actor.getId()));
         }
         return actorStream;
+    }
+
+    @Override
+    public Boolean existsById(Integer id) {
+        return store.get(id) != null;
     }
 }

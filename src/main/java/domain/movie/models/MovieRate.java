@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MovieRate extends BaseEntity {
-    public Integer movieId;
-    public Double avgRate;
+    private Integer movieId;
+    private Double avgRate;
 }

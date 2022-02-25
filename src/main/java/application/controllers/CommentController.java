@@ -2,15 +2,14 @@ package application.controllers;
 
 import org.springframework.stereotype.Controller;
 
-import application.models.request.CommentVoteRequestModel;
-import domain.comment.exceptions.CommentNotFoundException;
-import domain.comment.exceptions.InvalidVoteValueException;
+import application.models.request.VoteCommentRequestModel;
+import application.models.response.GenericResponseModel;
 import domain.comment.models.Comment;
 import domain.comment.services.CommentService;
 import domain.comment.services.CommentVoteService;
-import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.services.UserService;
+import infrastructure.exceptions.IemdbException;
 
 @Controller
 public class CommentController {
@@ -25,10 +24,16 @@ public class CommentController {
         this.userService = userService;
     }
 
-    public void voteComment(CommentVoteRequestModel commentVoteRequestModel)
-            throws CommentNotFoundException, UserNotFoundException, InvalidVoteValueException {
-        Comment comment = commentService.findCommentById(commentVoteRequestModel.getCommentId());
-        User user = userService.findUserByEmail(commentVoteRequestModel.getUserEmail());
-        commentVoteService.voteComment(user, comment, commentVoteRequestModel.getVote());
+    public GenericResponseModel voteComment(VoteCommentRequestModel voteCommentRequestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            Comment comment = commentService.findCommentById(voteCommentRequestModel.getCommentId());
+            User user = userService.findUserByEmail(voteCommentRequestModel.getUserEmail());
+            commentVoteService.voteComment(user, comment, voteCommentRequestModel.getVote());
+            response.setSuccessfulResponse("comment voted successfully");
+        } catch (IemdbException e) {
+            response.setUnsuccessfulResponse(e.toString());
+        }
+        return response;
     }
 }
