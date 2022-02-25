@@ -1,5 +1,12 @@
 package application.handlers;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Component;
+
 import application.models.response.*;
 import domain.actor.services.ActorService;
 import domain.comment.models.Comment;
@@ -12,12 +19,6 @@ import domain.movie.models.MovieComment;
 import domain.movie.services.MovieRateService;
 import domain.movie.services.MovieService;
 import infrastructure.BaseEntity;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class MovieHandler {
@@ -59,12 +60,13 @@ public class MovieHandler {
         Movie movie = movieService.findMovieById(id);
         Stream<ActorResponseModel> cast =
                 actorService.searchActors(movie.getCast()).map(ActorResponseModel::new);
-        Stream<Comment> comments =
-                commentService.searchComments(movie.getComments().stream().map(MovieComment::getCommentId).toList());
-        Map<Integer, List<CommentVote>> commentVotes = comments.collect(Collectors.toMap(BaseEntity::getId,
+        List<Comment> comments =
+                commentService.searchComments(movie.getComments().stream().map(MovieComment::getCommentId).toList())
+                        .toList();
+        Map<Integer, List<CommentVote>> commentVotes = comments.stream().collect(Collectors.toMap(BaseEntity::getId,
                 comment -> commentVoteService.findAllByCommentId(comment.getId()).toList()));
         Stream<CommentResponseModel> commentResponseModels =
-                comments.map(comment -> new CommentResponseModel(comment, commentVotes.get(comment.getId())));
+                comments.stream().map(comment -> new CommentResponseModel(comment, commentVotes.get(comment.getId())));
         Double movieRate = movieRateService.getMovieRate(movie);
         return new MovieDetailResponseModel(movie, commentResponseModels.toList(), cast.toList(), movieRate);
     }

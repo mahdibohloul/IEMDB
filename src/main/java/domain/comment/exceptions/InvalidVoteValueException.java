@@ -6,4 +6,9 @@ public class InvalidVoteValueException extends IemdbException {
     public InvalidVoteValueException(int vote) {
         super("Invalid vote value: " + vote);
     }
+
+    @Override
+    public String toString() {
+        return "InvalidVoteValue";
+    }
 }

@@ -2,6 +2,7 @@ package domain.user.services;
 
 import org.springframework.stereotype.Service;
 
+import domain.user.exceptions.DuplicateUserEmailException;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.repositories.UserRepository;
@@ -17,8 +18,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User insertUser(User user) {
-        return userRepository.save(user);
+    public User insertUser(User user) throws DuplicateUserEmailException {
+        try {
+            findUserByEmail(user.getEmail());
+            throw new DuplicateUserEmailException(user.getEmail());
+        } catch (UserNotFoundException e) {
+            return userRepository.save(user);
+        }
     }
 
     @Override

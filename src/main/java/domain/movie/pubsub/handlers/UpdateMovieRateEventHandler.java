@@ -1,12 +1,14 @@
 package domain.movie.pubsub.handlers;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import domain.movie.pubsub.events.MovieScoredEvent;
 import domain.movie.services.MovieRateService;
 
 @Component
+@Async
 public class UpdateMovieRateEventHandler {
 
     private final MovieRateService movieRateService;
