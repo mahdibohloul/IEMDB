@@ -17,11 +17,11 @@ public class ApplicationCommandLineRunner implements ApplicationRunner {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         String command;
-        do {
+        while (true) {
             command = scanner.nextLine();
             if (command.isEmpty() || command.isBlank() || command.equals("exit"))
                 break;
             System.out.println(commandLineRouter.route(command));
-        } while (true);
+        }
     }
 }
