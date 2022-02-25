@@ -50,6 +50,7 @@ public class MovieRateService {
     void should_update_movie_rate_with_success() {
         Movie movie = podamFactory.manufacturePojo(Movie.class);
         MovieRate movieRate = podamFactory.manufacturePojo(MovieRate.class);
+        //      TODO: ????
         Mockito.when(movieRateRepository.findByMovieId(movie.getId())).thenReturn(movieRate);
         movieRateService.updateMovieRate(movie.getId());
     }
@@ -57,6 +58,7 @@ public class MovieRateService {
     void should_get_movie_rate_with_success() {
         Movie movie = podamFactory.manufacturePojo(Movie.class);
         MovieRate movieRate = podamFactory.manufacturePojo(MovieRate.class);
+//      TODO: ????
         Mockito.when(movieRateRepository.findByMovieId(movie.getId())).thenReturn(movieRate);
         movieRateService.getMovieRate(movie).equals(0);
     }

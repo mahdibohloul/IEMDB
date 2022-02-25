@@ -1,6 +1,7 @@
 package domain.movie.services;
 
 import application.models.response.MovieResponseModel;
+import domain.actor.exceptions.ActorNotFoundException;
 import domain.comment.services.CommentService;
 import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
@@ -42,7 +43,7 @@ public class MovieServiceTest {
 
     @Test
     @DisplayName("should insert movie with success")
-    void should_insert_movie_with_success() {
+    void should_insert_movie_with_success() throws ActorNotFoundException {
         Movie movie = podamFactory.manufacturePojo(Movie.class);
         Mockito.when(movieRepository.save(movie)).thenReturn(movie);
         assert movieService.insertMovie(movie).equals(movie);
