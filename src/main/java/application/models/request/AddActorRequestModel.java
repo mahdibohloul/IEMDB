@@ -1,5 +1,7 @@
 package application.models.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import domain.actor.models.Actor;
 import infrastructure.BaseModel;
 import lombok.AllArgsConstructor;
@@ -15,10 +17,23 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActorRequestModel extends BaseModel {
+public class AddActorRequestModel extends BaseModel {
     private String name;
     private String birthDate;
     private String nationality;
+
+    @JsonCreator
+    public AddActorRequestModel(
+            @JsonProperty(required = true, value = "name") String name,
+            @JsonProperty(required = true, value = "birthDate") String birthDate,
+            @JsonProperty(required = true, value = "nationality") String nationality,
+            @JsonProperty(required = true, value = "id") Integer id
+    ) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.nationality = nationality;
+        this.id = id;
+    }
 
     public Actor toActor() throws ParseException {
         Actor actor = new Actor();
