@@ -1,10 +1,10 @@
 package domain.actor.services;
 
-import domain.actor.exceptions.ActorNotFoundException;
-import domain.actor.models.Actor;
-
 import java.util.List;
 import java.util.stream.Stream;
+
+import domain.actor.exceptions.ActorNotFoundException;
+import domain.actor.models.Actor;
 
 public interface ActorService {
     Actor insertActor(Actor actor);

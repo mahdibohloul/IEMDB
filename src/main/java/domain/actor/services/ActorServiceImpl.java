@@ -1,12 +1,13 @@
 package domain.actor.services;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.models.Actor;
 import domain.actor.repositories.ActorRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class ActorServiceImpl implements ActorService {

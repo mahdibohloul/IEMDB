@@ -1,11 +1,12 @@
 package domain.actor.repositories;
 
-import domain.actor.models.Actor;
-import infrastructure.store.InMemoryStore;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Repository;
+
+import domain.actor.models.Actor;
+import infrastructure.store.InMemoryStore;
 
 @Repository
 public class ActorRepositoryImpl implements ActorRepository {

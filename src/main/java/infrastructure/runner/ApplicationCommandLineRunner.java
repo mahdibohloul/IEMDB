@@ -1,9 +1,10 @@
 package infrastructure.runner;
 
-import framework.router.commandline.CommandLineRouter;
+import java.util.Scanner;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
+import framework.router.commandline.CommandLineRouter;
 
 @Service(value = "ApplicationCommandLineRunner")
 public class ApplicationCommandLineRunner implements ApplicationRunner {
