@@ -1,10 +1,8 @@
-package domain.actor;
+package domain.actor.services;
 
-import domain.actor.exceptions.ActorNotFoundException;
-import domain.actor.models.Actor;
-import domain.actor.repositories.ActorRepository;
-import domain.actor.services.ActorServiceImpl;
-import domain.comment.exceptions.InvalidVoteValueException;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import domain.actor.exceptions.ActorNotFoundException;
+import domain.actor.models.Actor;
+import domain.actor.repositories.ActorRepository;
+import infrastructure.BaseEntity;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ActorServiceTest {
     @InjectMocks
@@ -34,7 +34,7 @@ public class ActorServiceTest {
 
     @Test
     @DisplayName("should insert actor with success")
-    void should_insert_actor_with_success() throws InvalidVoteValueException {
+    void should_insert_actor_with_success() {
         Actor actor = podamFactory.manufacturePojo(Actor.class);
 
         Mockito.when(actorRepository.save(actor)).thenReturn(actor);
@@ -43,19 +43,17 @@ public class ActorServiceTest {
 
     @Test
     @DisplayName("should search actor with success")
-    void should_search_actor_with_success() throws InvalidVoteValueException {
-        Actor actor = podamFactory.manufacturePojo(Actor.class);
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add(actor.getId());
-        List<Integer> actors = new ArrayList<Integer>();
-        Mockito.when(actorRepository.findById(actor.getId())).thenReturn(actor);
-//        TODO: IDK HAVE  CAN I TEST LISTS
-        assert actorService.searchActors(ids).equals(actors);
+    void should_search_actor_with_success() {
+        List<Actor> actors = podamFactory.manufacturePojo(List.class, Actor.class);
+        List<Integer> ids = actors.stream().map(BaseEntity::getId).toList();
+        Mockito.when(actorRepository.searchActors(ids))
+                .thenReturn(actors.stream());
+        Assertions.assertArrayEquals(actorService.searchActors(ids).toArray(), actors.toArray());
     }
 
     @Test
     @DisplayName("should find actor by id with success")
-    void should_find_actor_by_id_with_success() throws InvalidVoteValueException, ActorNotFoundException {
+    void should_find_actor_by_id_with_success() throws ActorNotFoundException {
         Actor actor = podamFactory.manufacturePojo(Actor.class);
 
         Mockito.when(actorRepository.findById(actor.getId())).thenReturn(actor);
@@ -64,12 +62,9 @@ public class ActorServiceTest {
 
     @Test
     @DisplayName("should check exist actor by id with success")
-    void should_exist_actor_by_id_with_success() throws InvalidVoteValueException, ActorNotFoundException {
+    void actor_should_exist_with_success() {
         Actor actor = podamFactory.manufacturePojo(Actor.class);
-
-        Mockito.when(actorRepository.findById(actor.getId())).thenReturn(actor);
-        Mockito.when(actorRepository.save(actor)).thenReturn(actor);
-        actor = actorService.insertActor(actor);
+        Mockito.when(actorRepository.existsById(actor.getId())).thenReturn(true);
         assert actorService.existsActorById(actor.getId()).equals(true);
     }
 
