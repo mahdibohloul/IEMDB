@@ -36,7 +36,7 @@ public class MovieController {
         this.movieHandler = movieHandler;
     }
 
-    public GenericResponseModel addMove(AddMovieRequestModel addMovieRequestModel) {
+    public GenericResponseModel addMovie(AddMovieRequestModel addMovieRequestModel) {
         GenericResponseModel responseModel = new GenericResponseModel();
         try {
             Movie movie = addMovieRequestModel.toMovie();
