@@ -6,4 +6,9 @@ public class AgeLimitErrorException extends IemdbException {
     public AgeLimitErrorException(Integer userAge, Integer ageLimit) {
         super("User age is " + userAge + " and age limit is " + ageLimit);
     }
+
+    @Override
+    public String toString() {
+        return "AgeLimitError";
+    }
 }
