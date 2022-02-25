@@ -2,9 +2,7 @@ package domain.movie.services;
 
 import domain.movie.models.Movie;
 import domain.movie.models.MovieRate;
-import domain.movie.models.MovieScore;
 import domain.movie.repositories.MovieRateRepository;
-import domain.user.services.UserServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +14,7 @@ import org.slf4j.Logger;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-public class MovieRateService {
+public class MovieRateServiceTest {
 
     @InjectMocks
     private MovieRateServiceImpl movieRateService;
@@ -39,7 +37,7 @@ public class MovieRateService {
     private final PodamFactory podamFactory = new PodamFactoryImpl();
 
 
-    public MovieRateService(MovieRateRepository movieRateRepository, MovieScoreService movieScoreService, Logger logger) {
+    public MovieRateServiceTest(MovieRateRepository movieRateRepository, MovieScoreService movieScoreService, Logger logger) {
         this.movieRateRepository = movieRateRepository;
         this.movieScoreService = movieScoreService;
         this.logger = logger;
