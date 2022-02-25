@@ -59,4 +59,16 @@ public class CommentVoteServiceTest {
         Assertions.assertArrayEquals(commentVoteService.findAllByCommentId(comment.getId()).toArray(),
                 commentVotes.toArray());
     }
+
+    @Test
+    @DisplayName("should throw exception when vote value is out of range with fail")
+    public void should_throw_exception_when_vote_value_is_our_of_range_with_fail() {
+        User user = podamFactory.manufacturePojo(User.class);
+        Comment comment = podamFactory.manufacturePojo(Comment.class);
+        CommentVote commentVote = podamFactory.manufacturePojo(CommentVote.class);
+        Integer vote = 5;
+
+        Mockito.when(commentVoteRepository.save(commentVote)).thenReturn(commentVote);
+        Assertions.assertThrows(InvalidVoteValueException.class, () -> commentVoteService.voteComment(user, comment, vote));
+    }
 }
