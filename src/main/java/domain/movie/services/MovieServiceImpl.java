@@ -47,10 +47,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Integer addComment(Movie movie, String text, User user) throws MovieNotFoundException {
+    public Integer addComment(Movie movie, String text, User user) {
         Comment comment = new Comment(user.getEmail(), text, timeService.getCurrentTimestamp());
-        comment.setUserEmail(user.getEmail());
-        comment.setText(text);
         comment = commentService.insertComment(comment);
         movie.addComment(new MovieComment(movie.getId(), comment.getId()));
         updateMovie(movie);

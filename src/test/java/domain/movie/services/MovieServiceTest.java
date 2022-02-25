@@ -1,13 +1,7 @@
 package domain.movie.services;
 
-import application.models.response.MovieResponseModel;
-import domain.actor.exceptions.ActorNotFoundException;
-import domain.comment.services.CommentService;
-import domain.movie.exceptions.MovieNotFoundException;
-import domain.movie.models.Movie;
-import domain.movie.repositories.MovieRepository;
-import domain.user.models.User;
-import infrastructure.time.services.TimeService;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,12 +10,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.yaml.snakeyaml.util.EnumUtils;
+
+import domain.actor.exceptions.ActorNotFoundException;
+import domain.actor.services.ActorService;
+import domain.comment.models.Comment;
+import domain.comment.services.CommentService;
+import domain.movie.exceptions.MovieNotFoundException;
+import domain.movie.models.Movie;
+import domain.movie.repositories.MovieRepository;
+import domain.user.models.User;
+import infrastructure.time.services.TimeService;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MovieServiceTest {
@@ -31,8 +31,15 @@ public class MovieServiceTest {
     @Mock
     private MovieRepository movieRepository;
 
-//    private final CommentService commentService;
-//    private final TimeService timeService;
+    @Mock
+    private CommentService commentService;
+
+    @Mock
+    private TimeService timeService;
+
+    @Mock
+    private ActorService actorService;
+
     private final PodamFactory podamFactory = new PodamFactoryImpl();
 
 
@@ -45,6 +52,10 @@ public class MovieServiceTest {
     @DisplayName("should insert movie with success")
     void should_insert_movie_with_success() throws ActorNotFoundException {
         Movie movie = podamFactory.manufacturePojo(Movie.class);
+        if (movie.getCast() != null) {
+            for (Integer id : movie.getCast())
+                Mockito.when(actorService.existsActorById(id)).thenReturn(true);
+        }
         Mockito.when(movieRepository.save(movie)).thenReturn(movie);
         assert movieService.insertMovie(movie).equals(movie);
     }
@@ -61,34 +72,29 @@ public class MovieServiceTest {
 
     @Test
     @DisplayName("should add comment with success")
-    void should_add_comment_with_success() throws MovieNotFoundException {
+    void should_add_comment_with_success() {
         Movie movie = podamFactory.manufacturePojo(Movie.class);
         User user = podamFactory.manufacturePojo(User.class);
-        String text = "GOOD!";
-        Assertions.assertDoesNotThrow(() -> movieService.addComment(movie, text, user));
-        // TODO: i dk what to do!
-//        assert movieService.addComment(movie, text, user).equals(movie);
+        String text = podamFactory.manufacturePojo(String.class);
+        Long currentTimestamp = podamFactory.manufacturePojo(Long.class);
+        Comment comment = new Comment(user.getEmail(), text, currentTimestamp);
+        Comment savedComment = new Comment(user.getEmail(), text, currentTimestamp);
+        savedComment.setId(podamFactory.manufacturePojo(Integer.class));
+        Mockito.when(timeService.getCurrentTimestamp()).thenReturn(currentTimestamp);
+        Mockito.when(commentService.insertComment(comment)).thenReturn(savedComment);
+        assert movieService.addComment(movie, text, user).equals(savedComment.getId());
     }
 
     @Test
     @DisplayName("should get movies with success")
-    void should_get_movies_with_success(){
-        List ids = new ArrayList();
-
-        Movie firstMovie = podamFactory.manufacturePojo(Movie.class);
-        ids.add(firstMovie.getId());
-
-        Movie secondMove = podamFactory.manufacturePojo(Movie.class);
-        ids.add(secondMove.getId());
-
-        Assertions.assertDoesNotThrow(() -> movieService.searchMovies(ids, null, null, null,
-                null, null, null, null, null));
-
-        MovieResponseModel movies = (MovieResponseModel) movieService.searchMovies(ids, null, null,
-                null, null, null, null, null, null);
-
-
-//        TODO: IDK what to do?
+    void should_get_movies_with_success() {
+        List<Movie> movies = podamFactory.manufacturePojo(List.class, Movie.class);
+        List<Integer> ids = movies.stream().map(Movie::getId).toList();
+        Mockito.when(movieRepository.searchMovies(
+                ids, null, null, null, null, null, null, null, null
+        )).thenReturn(movies.stream());
+        List<Movie> searchedMovies = movieService.searchMovies(ids, null, null,
+                null, null, null, null, null, null).toList();
+        Assertions.assertArrayEquals(searchedMovies.toArray(), movies.toArray());
     }
 }
-
