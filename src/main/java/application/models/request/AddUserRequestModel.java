@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import domain.user.models.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequestModel {
+@NoArgsConstructor
+public class AddUserRequestModel {
     private String email;
     private String password;
     private String nickname;
@@ -21,7 +23,7 @@ public class UserRequestModel {
     private String birthDate;
 
     @JsonCreator
-    public UserRequestModel(@JsonProperty(required = true, value = "email") String email,
+    public AddUserRequestModel(@JsonProperty(required = true, value = "email") String email,
             @JsonProperty(required = true, value = "password") String password,
             @JsonProperty(required = true, value = "nickname") String nickname,
             @JsonProperty(required = true, value = "name") String name,

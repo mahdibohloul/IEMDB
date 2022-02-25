@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Controller;
 
 import application.handlers.MovieHandler;
+import application.models.request.AddUserRequestModel;
 import application.models.request.AddUserWatchListRequestModel;
 import application.models.request.GetUserWatchListRequestModel;
 import application.models.request.RemoveUserWatchListRequestModel;
-import application.models.request.UserRequestModel;
 import application.models.response.GenericResponseModel;
 import application.models.response.GetUserWatchListResponseModel;
 import application.models.response.MovieResponseModel;
@@ -41,10 +41,10 @@ public class UserController {
         this.movieHandler = movieHandler;
     }
 
-    public GenericResponseModel addUser(UserRequestModel userRequestModel) {
+    public GenericResponseModel addUser(AddUserRequestModel addUserRequestModel) {
         GenericResponseModel response = new GenericResponseModel();
         try {
-            User user = userRequestModel.toUser();
+            User user = addUserRequestModel.toUser();
             userService.insertUser(user);
             response.setSuccessfulResponse("user added successfully");
         } catch (ParseException e) {
