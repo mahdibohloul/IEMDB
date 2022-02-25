@@ -20,12 +20,7 @@ public class CommentVoteService {
     private CommentVoteServiceImpl commentVoteService;
 
     @Mock
-    private final CommentVoteRepository commentVoteRepository;
-
-    public CommentVoteService(CommentVoteServiceImpl commentVoteService, CommentVoteRepository commentVoteRepository) {
-        this.commentVoteService = commentVoteService;
-        this.commentVoteRepository = commentVoteRepository;
-    }
+    private CommentVoteRepository commentVoteRepository;
 
     private final PodamFactory podamFactory = new PodamFactoryImpl();
 

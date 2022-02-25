@@ -24,21 +24,16 @@ public class MovieScoreServiceTest {
     @InjectMocks
     private MovieScoreServiceImpl movieScoreService;
 
-    private final PodamFactory podamFactory = new PodamFactoryImpl();
+    private PodamFactory podamFactory = new PodamFactoryImpl();
 
     @Mock
-    private final MovieScoreRepository movieScoreRepository;
+    private MovieScoreRepository movieScoreRepository;
 
     @Mock
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     private static final Integer SCORE_UPPER_LIMIT = 10;
     private static final Integer SCORE_LOWER_LIMIT = 1;
-
-    public MovieScoreServiceTest(MovieScoreRepository movieScoreRepository, ApplicationEventPublisher applicationEventPublisher) {
-        this.movieScoreRepository = movieScoreRepository;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @BeforeEach
     void setUp() {

@@ -21,7 +21,7 @@ public class CommentServiceTest {
     private CommentServiceImpl commentService;
 
     @Mock
-    private final CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
 
     private final PodamFactory podamFactory = new PodamFactoryImpl();
@@ -29,12 +29,6 @@ public class CommentServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
-
-
-    public CommentServiceTest(CommentServiceImpl commentService, CommentRepository commentRepository) {
-        this.commentService = commentService;
-        this.commentRepository = commentRepository;
     }
 
     @Test

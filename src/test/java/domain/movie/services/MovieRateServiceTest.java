@@ -20,13 +20,13 @@ public class MovieRateServiceTest {
     private MovieRateServiceImpl movieRateService;
 
     @Mock
-    private final MovieRateRepository movieRateRepository;
+    private MovieRateRepository movieRateRepository;
 
     @Mock
-    private final MovieScoreService movieScoreService;
+    private MovieScoreService movieScoreService;
 
     @Mock
-    private final Logger logger;
+    private Logger logger;
 
     @BeforeEach
     void setUp() {
@@ -36,12 +36,6 @@ public class MovieRateServiceTest {
 
     private final PodamFactory podamFactory = new PodamFactoryImpl();
 
-
-    public MovieRateServiceTest(MovieRateRepository movieRateRepository, MovieScoreService movieScoreService, Logger logger) {
-        this.movieRateRepository = movieRateRepository;
-        this.movieScoreService = movieScoreService;
-        this.logger = logger;
-    }
 
     @Test
     @DisplayName("should update movie rate with successfully")

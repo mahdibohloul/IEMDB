@@ -31,10 +31,7 @@ public class MovieServiceTest {
     @Mock
     private MovieRepository movieRepository;
 
-//    private final CommentService commentService;
-//    private final TimeService timeService;
     private final PodamFactory podamFactory = new PodamFactoryImpl();
-
 
     @BeforeEach
     void setUp() {

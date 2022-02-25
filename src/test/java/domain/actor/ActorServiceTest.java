@@ -23,12 +23,7 @@ public class ActorServiceTest {
     private ActorServiceImpl actorService;
 
     @Mock
-    private final ActorRepository actorRepository;
-
-    public ActorServiceTest(ActorServiceImpl actorService, ActorRepository actorRepository) {
-        this.actorService = actorService;
-        this.actorRepository = actorRepository;
-    }
+    private ActorRepository actorRepository;
 
     private final PodamFactory podamFactory = new PodamFactoryImpl();
 
