@@ -1,8 +1,10 @@
 package application.controllers;
 
-import application.models.request.ActorRequestModel;
+import application.models.request.AddActorRequestModel;
+import application.models.response.GenericResponseModel;
 import domain.actor.models.Actor;
 import domain.actor.services.ActorService;
+import framework.router.commandline.exceptions.InvalidCommandException;
 import org.springframework.stereotype.Controller;
 
 import java.text.ParseException;
@@ -15,8 +17,15 @@ public class ActorController {
         this.actorService = actorService;
     }
 
-    public void addActor(ActorRequestModel actorRequestModel) throws ParseException {
-        Actor actor = actorRequestModel.toActor();
-        actorService.insertActor(actor);
+    public GenericResponseModel addActor(AddActorRequestModel addActorRequestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            Actor actor = addActorRequestModel.toActor();
+            actorService.insertActor(actor);
+            response.setSuccessfulResponse("actor added successfully");
+        } catch (ParseException e) {
+            response.setUnsuccessfulResponse(new InvalidCommandException("Invalid date format").toString());
+        }
+        return response;
     }
 }
