@@ -1,12 +1,10 @@
-package actor.services;
+package domain.actor;
 
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.models.Actor;
 import domain.actor.repositories.ActorRepository;
 import domain.actor.services.ActorServiceImpl;
 import domain.comment.exceptions.InvalidVoteValueException;
-import domain.comment.models.Comment;
-import domain.comment.models.CommentVote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
