@@ -62,4 +62,6 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
         Assertions.assertThrows(UserNotFoundException.class, () -> userService.findUserByEmail(user.getEmail()));
     }
+
+
 }
