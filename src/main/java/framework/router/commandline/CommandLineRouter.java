@@ -1,6 +1,7 @@
 package framework.router.commandline;
 
 import application.controllers.ActorController;
+import application.controllers.CommentController;
 import application.controllers.MovieController;
 import application.controllers.UserController;
 import application.models.request.*;
@@ -23,13 +24,16 @@ public class CommandLineRouter {
     private final UserController userController;
     private final MovieController movieController;
     private final ActorController actorController;
+    private final CommentController commentController;
 
     public CommandLineRouter(ObjectMapper objectMapper, UserController userController,
-            MovieController movieController, ActorController actorController) {
+            MovieController movieController, ActorController actorController,
+            CommentController commentController) {
         this.objectMapper = objectMapper;
         this.movieController = movieController;
         this.userController = userController;
         this.actorController = actorController;
+        this.commentController = commentController;
     }
 
     @SneakyThrows
@@ -109,8 +113,15 @@ public class CommandLineRouter {
     }
 
     @CommandType(command = "voteComment")
-    private String voteComment(String commandData) {
-        return "";
+    private String voteComment(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            VoteCommentRequestModel request = objectMapper.readValue(commandData, VoteCommentRequestModel.class);
+            responseModel = responseModel = commentController.voteComment(request);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     @CommandType(command = "addToWatchList")
