@@ -10,4 +10,9 @@ public class UserNotFoundException extends IemdbException {
     public UserNotFoundException(Integer userId) {
         super("User with id " + userId + " not found");
     }
+
+    @Override
+    public String toString() {
+        return "UserNotFound";
+    }
 }

@@ -6,6 +6,7 @@ import application.controllers.MovieController;
 import application.controllers.UserController;
 import application.models.request.*;
 import application.models.response.GenericResponseModel;
+import application.models.response.MoviesResponseModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -117,7 +118,7 @@ public class CommandLineRouter {
         GenericResponseModel responseModel = new GenericResponseModel();
         try {
             VoteCommentRequestModel request = objectMapper.readValue(commandData, VoteCommentRequestModel.class);
-            responseModel = responseModel = commentController.voteComment(request);
+            responseModel = commentController.voteComment(request);
         } catch (JsonMappingException e) {
             responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
         }
@@ -125,28 +126,82 @@ public class CommandLineRouter {
     }
 
     @CommandType(command = "addToWatchList")
-    private String addToWatchList(String commandData) {
-        return "";
+    private String addToWatchList(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            AddUserWatchListRequestModel request =
+                    objectMapper.readValue(commandData, AddUserWatchListRequestModel.class);
+            responseModel = userController.addToWatchList(request);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     @CommandType(command = "removeFromWatchList")
-    private String removeFromWatchList(String commandData) {
-        return "";
+    private String removeFromWatchList(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            RemoveUserWatchListRequestModel request =
+                    objectMapper.readValue(commandData, RemoveUserWatchListRequestModel.class);
+            responseModel = userController.removeFromWatchList(request);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     @CommandType(command = "getMoviesList")
-    private String getMoviesList(String commandData) {
-        return "";
+    private String getMoviesList(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            if (commandData != null && !commandData.isEmpty()) throw new InvalidCommandException(commandData);
+            MoviesResponseModel moviesResponseModel = movieController.getMoviesList();
+
+            responseModel.setSuccessfulResponse(moviesResponseModel);
+        } catch (InvalidCommandException e) {
+            responseModel.setUnsuccessfulResponse(e.toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     @CommandType(command = "getMovieById")
-    private String getMovieById(String commandData) {
-        return "";
+    private String getMovieById(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            GetMovieByIdRequestModel request = objectMapper.readValue(commandData, GetMovieByIdRequestModel.class);
+            responseModel = movieController.getMovieById(request);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     @CommandType(command = "getMoviesByGenre")
-    private String getMoviesByGenre(String commandData) {
-        return "";
+    private String getMoviesByGenre(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            GetMoviesByGenreRequestModel request =
+                    objectMapper.readValue(commandData, GetMoviesByGenreRequestModel.class);
+            MoviesResponseModel moviesResponseModel = movieController.getMoviesByGenre(request);
+            responseModel.setSuccessfulResponse(moviesResponseModel);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
+    }
+
+    @CommandType(command = "getWatchList")
+    private String getWatchList(String commandData) throws JsonProcessingException {
+        GenericResponseModel responseModel = new GenericResponseModel();
+        try {
+            GetUserWatchListRequestModel request =
+                    objectMapper.readValue(commandData, GetUserWatchListRequestModel.class);
+            responseModel = userController.getUserWatchList(request);
+        } catch (JsonMappingException e) {
+            responseModel.setUnsuccessfulResponse(new InvalidCommandException(commandData).toString());
+        }
+        return objectMapper.writeValueAsString(responseModel);
     }
 
     private Method getHandlerFunction(String commandType) throws InvalidCommandException {

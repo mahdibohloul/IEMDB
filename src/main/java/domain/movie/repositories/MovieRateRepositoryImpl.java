@@ -1,5 +1,7 @@
 package domain.movie.repositories;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import domain.movie.models.MovieRate;
@@ -10,8 +12,8 @@ public class MovieRateRepositoryImpl implements MovieRateRepository {
     private final InMemoryStore<MovieRate, Integer> store = new InMemoryStore<>();
 
     @Override
-    public MovieRate findByMovieId(Integer movieId) {
-        return store.getAll().stream().filter(movieRate -> movieRate.getMovieId().equals(movieId)).findFirst().orElse(null);
+    public Optional<MovieRate> findByMovieId(Integer movieId) {
+        return store.getAll().stream().filter(movieRate -> movieRate.getMovieId().equals(movieId)).findFirst();
     }
 
     @Override

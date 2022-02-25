@@ -1,9 +1,9 @@
 package infrastructure.startup;
 
-import infrastructure.runner.ApplicationRunner;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import infrastructure.beans.ComponentsConfiguration;
+import infrastructure.runner.ApplicationRunner;
 
 //TODO make this class a singleton
 public class ApplicationStartup {

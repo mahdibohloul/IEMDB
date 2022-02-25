@@ -1,5 +1,12 @@
 package domain.movie.services;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
+import domain.actor.exceptions.ActorNotFoundException;
+import domain.actor.services.ActorService;
 import domain.comment.models.Comment;
 import domain.comment.services.CommentService;
 import domain.movie.exceptions.MovieNotFoundException;
@@ -8,10 +15,6 @@ import domain.movie.models.MovieComment;
 import domain.movie.repositories.MovieRepository;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -19,17 +22,20 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final CommentService commentService;
     private final TimeService timeService;
+    private final ActorService actorService;
 
     public MovieServiceImpl(MovieRepository movieRepository,
             CommentService commentService,
-            TimeService timeService) {
+            TimeService timeService, ActorService actorService) {
         this.movieRepository = movieRepository;
         this.commentService = commentService;
         this.timeService = timeService;
+        this.actorService = actorService;
     }
 
     @Override
-    public Movie insertMovie(Movie movie) {
+    public Movie insertMovie(Movie movie) throws ActorNotFoundException {
+        validateCast(movie.getCast());
         return movieRepository.save(movie);
     }
 
@@ -41,13 +47,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addComment(Movie movie, String text, User user) throws MovieNotFoundException {
+    public Integer addComment(Movie movie, String text, User user) throws MovieNotFoundException {
         Comment comment = new Comment(user.getEmail(), text, timeService.getCurrentTimestamp());
         comment.setUserEmail(user.getEmail());
         comment.setText(text);
         comment = commentService.insertComment(comment);
         movie.addComment(new MovieComment(movie.getId(), comment.getId()));
         updateMovie(movie);
+        return comment.getId();
     }
 
     @Override
@@ -61,5 +68,15 @@ public class MovieServiceImpl implements MovieService {
 
     private Movie updateMovie(Movie movie) {
         return movieRepository.save(movie);
+    }
+
+    private void validateCast(List<Integer> cast) throws ActorNotFoundException {
+        if (cast != null) {
+            for (Integer id : cast) {
+                if (!actorService.existsActorById(id)) {
+                    throw new ActorNotFoundException(id);
+                }
+            }
+        }
     }
 }

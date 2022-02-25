@@ -1,5 +1,7 @@
 package application.controllers;
 
+import org.springframework.stereotype.Controller;
+
 import application.models.request.VoteCommentRequestModel;
 import application.models.response.GenericResponseModel;
 import domain.comment.models.Comment;
@@ -8,7 +10,6 @@ import domain.comment.services.CommentVoteService;
 import domain.user.models.User;
 import domain.user.services.UserService;
 import infrastructure.exceptions.IemdbException;
-import org.springframework.stereotype.Controller;
 
 @Controller
 public class CommentController {

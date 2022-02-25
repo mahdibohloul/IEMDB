@@ -1,5 +1,12 @@
 package domain.user.services;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.user.exceptions.AgeLimitErrorException;
@@ -7,9 +14,6 @@ import domain.user.exceptions.MovieAlreadyExistsException;
 import domain.user.models.User;
 import domain.user.models.UserWatchList;
 import domain.user.repositories.UserWatchListRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.stream.Stream;
 
 @Service
 public class UserWatchListServiceImpl implements UserWatchListService {
@@ -47,7 +51,9 @@ public class UserWatchListServiceImpl implements UserWatchListService {
     }
 
     public void validateMovieAgeLimit(User user, Movie movie) throws AgeLimitErrorException {
-        Integer year = user.getBirthDate().getYear() + 1900;
+        LocalDate userBirthDate = user.getBirthDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate curDate = LocalDate.now();
+        Integer year = Period.between(userBirthDate, curDate).getYears();
         if (year < movie.getAgeLimit())
             throw new AgeLimitErrorException(year, movie.getAgeLimit());
     }

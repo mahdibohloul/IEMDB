@@ -1,12 +1,13 @@
 package domain.movie.services;
 
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.movie.models.Movie;
 import domain.movie.models.MovieRate;
 import domain.movie.models.MovieScore;
 import domain.movie.repositories.MovieRateRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.stream.Stream;
 
 @Service
 public class MovieRateServiceImpl implements MovieRateService {
@@ -35,7 +36,10 @@ public class MovieRateServiceImpl implements MovieRateService {
 
     @Override
     public Double getMovieRate(Movie movie) {
-        return movieRateRepository.findByMovieId(movie.getId()).getAvgRate();
+        MovieRate movieRate = getMovieRate(movie.getId());
+        if (movieRate == null)
+            return null;
+        return movieRate.getAvgRate();
     }
 
     private Double calculateMovieRate(Stream<Double> scores) {
@@ -43,6 +47,6 @@ public class MovieRateServiceImpl implements MovieRateService {
     }
 
     private MovieRate getMovieRate(Integer movieId) {
-        return movieRateRepository.findByMovieId(movieId);
+        return movieRateRepository.findByMovieId(movieId).orElse(null);
     }
 }

@@ -1,6 +1,5 @@
 package domain.user.services;
 
-import domain.user.exceptions.DuplicateUserEmailException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import domain.user.exceptions.DuplicateUserEmailException;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.repositories.UserRepository;

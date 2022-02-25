@@ -1,8 +1,8 @@
 package domain.user.services;
 
-import domain.user.exceptions.DuplicateUserEmailException;
 import org.springframework.stereotype.Service;
 
+import domain.user.exceptions.DuplicateUserEmailException;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.repositories.UserRepository;
