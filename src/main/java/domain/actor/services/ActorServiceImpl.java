@@ -1,9 +1,9 @@
 package domain.actor.services;
 
-import org.springframework.stereotype.Service;
-
+import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.models.Actor;
 import domain.actor.repositories.ActorRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,11 +19,25 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor insertActor(Actor actor) {
-        return actorRepository.insert(actor);
+        return actorRepository.save(actor);
     }
 
     @Override
     public Stream<Actor> searchActors(List<Integer> ids) {
         return actorRepository.searchActors(ids);
+    }
+
+    @Override
+    public Actor findActorById(Integer id) throws ActorNotFoundException {
+        Actor actor = actorRepository.findById(id);
+        if (actor == null) {
+            throw new ActorNotFoundException(id);
+        }
+        return actor;
+    }
+
+    @Override
+    public Boolean existsActorById(Integer id) {
+        return actorRepository.existsById(id);
     }
 }

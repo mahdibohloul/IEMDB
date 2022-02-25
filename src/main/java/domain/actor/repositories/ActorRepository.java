@@ -8,4 +8,6 @@ import java.util.stream.Stream;
 
 public interface ActorRepository extends InMemoryRepository<Actor, Integer> {
     Stream<Actor> searchActors(List<Integer> ids);
+
+    Boolean existsById(Integer id);
 }

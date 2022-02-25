@@ -1,5 +1,6 @@
 package domain.actor.services;
 
+import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.models.Actor;
 
 import java.util.List;
@@ -9,4 +10,8 @@ public interface ActorService {
     Actor insertActor(Actor actor);
 
     Stream<Actor> searchActors(List<Integer> ids);
+
+    Actor findActorById(Integer id) throws ActorNotFoundException;
+
+    Boolean existsActorById(Integer id);
 }
