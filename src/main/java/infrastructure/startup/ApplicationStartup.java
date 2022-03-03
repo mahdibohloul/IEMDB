@@ -1,9 +1,13 @@
 package infrastructure.startup;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import infrastructure.AppConfig;
 import infrastructure.beans.ComponentsConfiguration;
+import infrastructure.dataprovider.services.DataProvider;
 import infrastructure.runner.ApplicationRunner;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import java.io.IOException;
 
 //TODO make this class a singleton
 public class ApplicationStartup {
@@ -19,6 +23,10 @@ public class ApplicationStartup {
     }
 
     public void run(ApplicationRunner applicationRunner) {
+        AppConfig appConfig = context.getBean(AppConfig.class);
+        if (appConfig.getPopulateDatabase()) {
+            populateDatabase();
+        }
         applicationRunner.run();
         stop();
     }
@@ -38,6 +46,21 @@ public class ApplicationStartup {
 
     private void registerComponents() {
         context.register(ComponentsConfiguration.class);
+    }
+
+    private void populateDatabase() {
+        long startTime = System.currentTimeMillis();
+        context.getBeansOfType(DataProvider.class).values().stream()
+                .sorted(AnnotationAwareOrderComparator.INSTANCE)
+                .forEach(dataProvider -> {
+                    try {
+                        dataProvider.populateData(dataProvider.provide());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+        long endTime = System.currentTimeMillis();
+        System.out.println("Database populated in " + (endTime - startTime) + " ms");
     }
 
 }
