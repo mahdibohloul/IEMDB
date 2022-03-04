@@ -1,16 +1,17 @@
 package infrastructure.dataprovider.services;
 
+import java.io.IOException;
+import java.util.stream.Stream;
+
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieService;
 import infrastructure.AppConfig;
 import infrastructure.dataprovider.models.MovieModel;
 import infrastructure.http.services.HttpClient;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.stream.Stream;
 
 @Component
 @Order(value = 2)
@@ -57,6 +58,7 @@ public class MovieDataProvider implements DataProvider<MovieModel> {
         movie.setImdbRate(movieModel.getImdbRate());
         movie.setDuration(movieModel.getDuration());
         movie.setAgeLimit(movieModel.getAgeLimit());
+        movie.setGenres(movieModel.getGenres());
         return movie;
     }
 }

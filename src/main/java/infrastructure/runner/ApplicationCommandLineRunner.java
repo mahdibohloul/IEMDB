@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.springframework.stereotype.Service;
 
 import framework.router.commandline.CommandLineRouter;
+import infrastructure.startup.ApplicationStartup;
 
 @Service(value = "ApplicationCommandLineRunner")
 public class ApplicationCommandLineRunner implements ApplicationRunner {
@@ -24,5 +25,10 @@ public class ApplicationCommandLineRunner implements ApplicationRunner {
                 break;
             System.out.println(commandLineRouter.route(command));
         }
+    }
+
+    @Override
+    public void stop() {
+        ApplicationStartup.stop();
     }
 }

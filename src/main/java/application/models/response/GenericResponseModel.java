@@ -14,6 +14,10 @@ public class GenericResponseModel {
         this.data = data;
     }
 
+    public Boolean isSuccess() {
+        return this.success;
+    }
+
     public void setSuccessfulResponse(Object data) {
         this.success = true;
         this.data = data;
@@ -30,5 +34,9 @@ public class GenericResponseModel {
     @Override
     public int hashCode() {
         return Objects.hash(success, data);
+    }
+
+    public Object getData() {
+        return data;
     }
 }

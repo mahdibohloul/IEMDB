@@ -1,12 +1,12 @@
 package application.models.response;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import domain.movie.models.Movie;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +23,7 @@ public class MovieDetailResponseModel {
     private Double rating;
     private Integer duration;
     private Integer ageLimit;
+    private Double imdbRate;
     private List<CommentResponseModel> comments;
 
     public MovieDetailResponseModel(Movie movie, List<CommentResponseModel> comments, List<ActorResponseModel> cast,
@@ -39,5 +40,6 @@ public class MovieDetailResponseModel {
         this.duration = movie.getDuration();
         this.ageLimit = movie.getAgeLimit();
         this.comments = comments;
+        this.imdbRate = movie.getImdbRate();
     }
 }
