@@ -50,12 +50,18 @@ public class MovieHandler {
         return new MovieResponseModel(movie, movieRate, actorStream.toList());
     }
 
-    public MoviesResponseModel getMovieList(List<Integer> ids, List<String> names, List<String> directors,
+    public MoviesResponseModel getMovieList(
+            List<Integer> ids,
+            List<String> names,
+            List<String> directors,
+            List<Integer> cast,
             List<String> writers, List<String> genres,
-            Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt) {
+            Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt, Integer yearGt,
+            Integer yearLt) {
         Stream<Movie> movieStream =
-                movieService.searchMovies(ids, names, directors, writers, genres, imdbRateGt, imdbRateLt, ageLimitGt,
-                        ageLimitLt);
+                movieService.searchMovies(ids, names, directors, writers, genres, cast, imdbRateGt, imdbRateLt,
+                        ageLimitGt,
+                        ageLimitLt, yearGt, yearLt);
         MoviesResponseModel movieList = new MoviesResponseModel();
         List<MovieResponseModel> movieResponseModels =
                 movieStream.map(this::getMovie).toList();

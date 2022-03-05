@@ -57,11 +57,25 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Stream<Movie> searchMovies(List<Integer> ids,
-            List<String> names, List<String> directors, List<String> writers,
-            List<String> genres, Double imdbRateGt, Double imdbRateLt,
-            Integer ageLimitGt, Integer ageLimitLt) {
-        return movieRepository.searchMovies(ids, names, directors, writers, genres, imdbRateGt, imdbRateLt, ageLimitGt,
-                ageLimitLt);
+            List<String> names,
+            List<String> directors,
+            List<String> writers,
+            List<String> genres,
+            List<Integer> cast,
+            Double imdbRateGt,
+            Double imdbRateLt,
+            Integer ageLimitGt,
+            Integer ageLimitLt,
+            Integer yearGt,
+            Integer yearLt) {
+        return movieRepository.searchMovies(ids,
+                names,
+                directors,
+                writers,
+                genres,
+                cast,
+                imdbRateGt, imdbRateLt,
+                ageLimitGt, ageLimitLt, yearGt, yearLt);
     }
 
     private Movie updateMovie(Movie movie) {

@@ -91,10 +91,10 @@ public class MovieServiceTest {
         List<Movie> movies = podamFactory.manufacturePojo(List.class, Movie.class);
         List<Integer> ids = movies.stream().map(Movie::getId).toList();
         Mockito.when(movieRepository.searchMovies(
-                ids, null, null, null, null, null, null, null, null
-        )).thenReturn(movies.stream());
+                ids, null, null, null, null, null, null, null, null,
+                null, null, null)).thenReturn(movies.stream());
         List<Movie> searchedMovies = movieService.searchMovies(ids, null, null,
-                null, null, null, null, null, null).toList();
+                null, null, null, null, null, null, null, null, null).toList();
         Assertions.assertArrayEquals(searchedMovies.toArray(), movies.toArray());
     }
 }

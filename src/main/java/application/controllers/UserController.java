@@ -96,6 +96,9 @@ public class UserController {
                     }).map(
                             movieHandler::getMovie).toList();
             getUserWatchListResponseModel.setWatchList(movieResponseModels);
+            getUserWatchListResponseModel.setUserEmail(user.getEmail());
+            getUserWatchListResponseModel.setUserName(user.getName());
+            getUserWatchListResponseModel.setUserNickname(user.getNickname());
             response.setSuccessfulResponse(getUserWatchListResponseModel);
         } catch (IemdbException e) {
             response.setUnsuccessfulResponse(e.toString());

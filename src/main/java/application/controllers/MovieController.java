@@ -77,7 +77,9 @@ public class MovieController {
     }
 
     public MoviesResponseModel getMoviesList() {
-        return movieHandler.getMovieList(null, null, null, null, null, null, null, null, null);
+        return movieHandler.getMovieList(null,
+                null, null, null, null,
+                null, null, null, null, null, null, null);
     }
 
     public GenericResponseModel getMovieById(GetMovieByIdRequestModel getMovieByIdRequestModel) {
@@ -92,9 +94,16 @@ public class MovieController {
     }
 
     public MoviesResponseModel getMoviesByGenre(GetMoviesByGenreRequestModel getMoviesByGenreRequestModel) {
-        return movieHandler.getMovieList(null, null, null, null,
+        return movieHandler.getMovieList(null, null, null, null, null,
                 List.of(getMoviesByGenreRequestModel.getGenre()), null,
-                null, null, null);
+                null, null, null, null, null);
+    }
+
+    public MoviesResponseModel getMoviesByYear(GetMoviesByYearRequestModel getMoviesByYearRequestModel) {
+        return movieHandler.getMovieList(null, null, null, null,
+                null, null, null, null, null, null,
+                getMoviesByYearRequestModel.getStartYear(),
+                getMoviesByYearRequestModel.getEndYear());
     }
 
 

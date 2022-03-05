@@ -1,12 +1,13 @@
 package domain.movie.repositories;
 
+import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Repository;
 
 import domain.movie.models.Movie;
 import infrastructure.store.InMemoryStore;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Repository
 public class MovieRepositoryImpl implements MovieRepository {
@@ -39,9 +40,18 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Stream<Movie> searchMovies(List<Integer> ids, List<String> names, List<String> directors,
-            List<String> writers, List<String> genres, Double imdbRateGt, Double imdbRateLt,
-            Integer ageLimitGt, Integer ageLimitLt) {
+    public Stream<Movie> searchMovies(List<Integer> ids,
+            List<String> names,
+            List<String> directors,
+            List<String> writers,
+            List<String> genres,
+            List<Integer> cast,
+            Double imdbRateGt,
+            Double imdbRateLt,
+            Integer ageLimitGt,
+            Integer ageLimitLt,
+            Integer yearGt,
+            Integer yearLt) {
         Stream<Movie> movies = store.getAll().stream();
         if (ids != null) {
             movies = movies.filter(movie -> ids.contains(movie.getId()));
@@ -55,16 +65,18 @@ public class MovieRepositoryImpl implements MovieRepository {
         }
         if (writers != null) {
             movies = movies.filter(
-                    movie -> writers.stream()
-                            .anyMatch(writer -> movie.getWriters().stream().anyMatch(mw -> writers.stream().anyMatch(
-                                    mw::equalsIgnoreCase)))
-            );
+                    movie -> movie.getWriters().stream()
+                            .anyMatch(mw -> writers.stream().anyMatch(mw::equalsIgnoreCase)));
         }
         if (genres != null) {
             movies = movies.filter(
-                    movie -> genres.stream()
-                            .anyMatch(genre -> movie.getGenres().stream().anyMatch(mw -> genres.stream().anyMatch(
-                                    mw::equalsIgnoreCase)))
+                    movie -> movie.getGenres().stream()
+                            .anyMatch(mg -> genres.stream().anyMatch(mg::equalsIgnoreCase))
+            );
+        }
+        if (cast != null) {
+            movies = movies.filter(
+                    movie -> movie.getCast().stream().anyMatch(cast::contains)
             );
         }
         if (imdbRateGt != null) {
@@ -78,6 +90,20 @@ public class MovieRepositoryImpl implements MovieRepository {
         }
         if (ageLimitLt != null) {
             movies = movies.filter(movie -> movie.getAgeLimit() < ageLimitLt);
+        }
+        if (yearGt != null) {
+            movies = movies.filter(movie -> {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(movie.getReleaseDate());
+                return calendar.get(Calendar.YEAR) > yearGt;
+            });
+        }
+        if (yearLt != null) {
+            movies = movies.filter(movie -> {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(movie.getReleaseDate());
+                return calendar.get(Calendar.YEAR) < yearLt;
+            });
         }
 
 
