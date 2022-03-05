@@ -1,16 +1,15 @@
 package infrastructure.startup;
 
-import java.io.IOException;
-
+import infrastructure.AppConfig;
+import infrastructure.beans.ComponentsConfiguration;
+import infrastructure.dataprovider.services.DataProvider;
+import infrastructure.runner.ApplicationRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import infrastructure.AppConfig;
-import infrastructure.beans.ComponentsConfiguration;
-import infrastructure.dataprovider.services.DataProvider;
-import infrastructure.runner.ApplicationRunner;
+import java.io.IOException;
 
 public class ApplicationStartup {
     private static AnnotationConfigApplicationContext context;
@@ -29,6 +28,7 @@ public class ApplicationStartup {
             populateDatabase();
         }
         applicationRunner.run();
+        applicationRunner.stop();
     }
 
     public static void run(String applicationRunnerName) {
