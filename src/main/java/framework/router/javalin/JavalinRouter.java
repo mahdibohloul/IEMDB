@@ -118,7 +118,7 @@ public class JavalinRouter {
         context.status(HttpCode.OK);
     }
 
-    @PathHandler(path = "/watchList/{user_id}/{movie_id}", handlerTypes = HandlerType.POST)
+    @PathHandler(path = "/watchList/{user_id}/{movie_id}", handlerTypes = {HandlerType.POST, HandlerType.GET})
     private void addWatchList(Context context) throws IOException {
         String userEmail = context.formParamMap().containsKey("user_id") ? context.formParam("user_id") :
                 context.pathParam("user_id");
@@ -130,7 +130,7 @@ public class JavalinRouter {
         handleGenericResponseModel(response, context);
     }
 
-    @PathHandler(path = "/rateMovie/{user_id}/{movie_id}/{rate}", handlerTypes = HandlerType.POST)
+    @PathHandler(path = "/rateMovie/{user_id}/{movie_id}/{rate}", handlerTypes = {HandlerType.POST, HandlerType.GET})
     private void rateMovie(Context context) throws IOException {
 
         String userEmail = context.formParamMap().containsKey("user_id") ? context.formParam("user_id") :
@@ -146,7 +146,7 @@ public class JavalinRouter {
         handleGenericResponseModel(response, context);
     }
 
-    @PathHandler(path = "/voteComment/{user_id}/{comment_id}/{vote}", handlerTypes = HandlerType.POST)
+    @PathHandler(path = "/voteComment/{user_id}/{comment_id}/{vote}", handlerTypes = {HandlerType.POST, HandlerType.GET})
     private void voteComment(Context context) throws IOException {
         String userEmail = context.pathParam("user_id");
         Integer commentId = Integer.valueOf(context.pathParam("comment_id"));
