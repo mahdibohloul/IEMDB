@@ -40,4 +40,11 @@ public class CommentVoteRepositoryImpl implements CommentVoteRepository {
     public Stream<CommentVote> findAllByCommentId(Integer commentId) {
         return store.getAll().stream().filter(commentVote -> commentVote.getCommentId().equals(commentId));
     }
+
+    @Override
+    public CommentVote findByCommentIdAndUserEmail(Integer commentId, String userEmail) {
+        return store.getAll().stream().filter(commentVote -> commentVote.getCommentId().equals(commentId) &&
+                                                             commentVote.getUserEmail().equals(userEmail)).findFirst()
+                .orElse(null);
+    }
 }

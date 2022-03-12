@@ -16,6 +16,7 @@ public class ApplicationStartup {
 
     public static void start() {
         registerComponents();
+        setEnvironment();
         getContext().refresh();
     }
 
@@ -68,4 +69,7 @@ public class ApplicationStartup {
         logger.info("Database populated in " + (endTime - startTime) + " ms");
     }
 
+    private static void setEnvironment() {
+        getContext().getEnvironment().addActiveProfile("tomcat");
+    }
 }

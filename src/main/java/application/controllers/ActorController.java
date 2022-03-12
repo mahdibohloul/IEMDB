@@ -1,14 +1,5 @@
 package application.controllers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Controller;
-
 import application.models.request.AddActorRequestModel;
 import application.models.request.GetActorByIdRequestModel;
 import application.models.response.ActorDetailResponseModel;
@@ -20,7 +11,15 @@ import domain.actor.services.ActorService;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieRateService;
 import domain.movie.services.MovieService;
+import domain.movie.valueobjects.MovieSearchModel;
 import framework.router.commandline.exceptions.InvalidCommandException;
+import org.springframework.stereotype.Controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ActorController {
@@ -50,9 +49,9 @@ public class ActorController {
     public ActorDetailResponseModel getActorById(GetActorByIdRequestModel getActorByIdRequestModel)
             throws ActorNotFoundException {
         Actor actor = actorService.findActorById(getActorByIdRequestModel.getActorId());
-        List<Movie> movies = movieService.searchMovies(null, null, null, null, null,
-                Collections.singletonList(actor.getId()), null, null,
-                null, null, null, null).toList();
+        MovieSearchModel searchModel = new MovieSearchModel();
+        searchModel.setCast(List.of(actor.getId()));
+        List<Movie> movies = movieService.searchMovies(searchModel).toList();
         Map<Integer, Double> movieRates =
                 movies.stream().collect(Collectors.toMap(Movie::getId, movie -> {
                     Double rate = movieRateService.getMovieRate(movie);

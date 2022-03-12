@@ -20,11 +20,21 @@ public class CommentVoteServiceImpl implements CommentVoteService {
 
     @Override
     public CommentVote voteComment(User user, Comment comment, int vote) throws InvalidVoteValueException {
-        CommentVote commentVote = new CommentVote();
-        commentVote.setCommentId(comment.getId());
-        commentVote.setUserEmail(user.getEmail());
-        commentVote.setType(VoteType.fromInt(vote));
-        return commentVoteRepository.save(commentVote);
+        CommentVote existingVote = commentVoteRepository.findByCommentIdAndUserEmail(comment.getId(), user.getEmail());
+        VoteType voteType = VoteType.fromInt(vote);
+        if (existingVote != null) {
+            if (existingVote.getType() != voteType) {
+                existingVote.setType(voteType);
+                return commentVoteRepository.save(existingVote);
+            }
+            return existingVote;
+        } else {
+            CommentVote commentVote = new CommentVote();
+            commentVote.setCommentId(comment.getId());
+            commentVote.setUserEmail(user.getEmail());
+            commentVote.setType(voteType);
+            return commentVoteRepository.save(commentVote);
+        }
     }
 
     @Override
