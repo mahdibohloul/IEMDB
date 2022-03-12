@@ -15,4 +15,6 @@ public interface UserWatchListService {
     void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException;
 
     Stream<UserWatchList> getUserWatchList(User user);
+
+    Stream<Movie> getRecommendedMovie(User user, Integer count);
 }
