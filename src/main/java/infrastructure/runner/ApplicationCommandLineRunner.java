@@ -1,13 +1,14 @@
 package infrastructure.runner;
 
-import java.util.Scanner;
-
-import org.springframework.stereotype.Service;
-
 import framework.router.commandline.CommandLineRouter;
 import infrastructure.startup.ApplicationStartup;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+import java.util.Scanner;
 
 @Service(value = "ApplicationCommandLineRunner")
+@Profile("cli")
 public class ApplicationCommandLineRunner implements ApplicationRunner {
     private final CommandLineRouter commandLineRouter;
 
