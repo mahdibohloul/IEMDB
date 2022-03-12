@@ -1,5 +1,11 @@
 package application.controllers;
 
+import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Controller;
+
 import application.handlers.MovieHandler;
 import application.models.request.*;
 import application.models.response.GenericResponseModel;
@@ -16,11 +22,6 @@ import domain.user.services.UserService;
 import domain.user.services.UserWatchListService;
 import framework.router.commandline.exceptions.InvalidCommandException;
 import infrastructure.exceptions.IemdbException;
-import org.springframework.stereotype.Controller;
-
-import java.text.ParseException;
-import java.util.List;
-import java.util.stream.Stream;
 
 @Controller
 public class UserController {

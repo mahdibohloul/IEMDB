@@ -1,16 +1,17 @@
 package framework.router.servlet.handlers;
 
-import domain.user.exceptions.UserNotFoundException;
-import domain.user.models.User;
-import infrastructure.startup.ApplicationStartup;
-import infrastructure.workcontext.services.WorkContext;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import domain.user.exceptions.UserNotFoundException;
+import domain.user.models.User;
+import infrastructure.startup.ApplicationStartup;
+import infrastructure.workcontext.services.WorkContext;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {

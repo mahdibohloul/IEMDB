@@ -1,10 +1,11 @@
 package domain.comment.repositories;
 
-import domain.comment.models.CommentVote;
-import infrastructure.store.InMemoryStore;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.stream.Stream;
+import domain.comment.models.CommentVote;
+import infrastructure.store.InMemoryStore;
 
 @Repository
 public class CommentVoteRepositoryImpl implements CommentVoteRepository {

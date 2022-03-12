@@ -1,15 +1,16 @@
 package domain.movie.repositories;
 
-import domain.movie.models.Movie;
-import domain.movie.valueobjects.MovieSearchModel;
-import infrastructure.store.InMemoryStore;
-import org.springframework.stereotype.Repository;
-
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Repository;
+
+import domain.movie.models.Movie;
+import domain.movie.valueobjects.MovieSearchModel;
+import infrastructure.store.InMemoryStore;
 
 @Repository
 public class MovieRepositoryImpl implements MovieRepository {

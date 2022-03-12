@@ -1,10 +1,10 @@
 package domain.movie.valueobjects;
 
+import java.util.List;
+
 import infrastructure.SortOrder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter

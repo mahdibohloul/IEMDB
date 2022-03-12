@@ -1,11 +1,11 @@
 package infrastructure.beans;
 
-import infrastructure.runner.ApplicationTomcatRunner;
-import infrastructure.startup.ApplicationStartup;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+
+import infrastructure.runner.ApplicationTomcatRunner;
+import infrastructure.startup.ApplicationStartup;
 
 @WebListener
 public class ServletInitializerConfiguration implements ServletContextListener {

@@ -1,15 +1,16 @@
 package application.models.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import domain.actor.models.Actor;
-import domain.movie.models.Movie;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import domain.actor.models.Actor;
+import domain.movie.models.Movie;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

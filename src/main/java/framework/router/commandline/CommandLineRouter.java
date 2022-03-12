@@ -1,5 +1,14 @@
 package framework.router.commandline;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import application.controllers.ActorController;
 import application.controllers.CommentController;
 import application.controllers.MovieController;
@@ -7,17 +16,10 @@ import application.controllers.UserController;
 import application.models.request.*;
 import application.models.response.GenericResponseModel;
 import application.models.response.MoviesResponseModel;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import framework.router.commandline.annotation.CommandType;
 import framework.router.commandline.exceptions.InvalidCommandException;
 import infrastructure.json.services.JsonUtil;
 import lombok.SneakyThrows;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @Component
 @Profile("cli")

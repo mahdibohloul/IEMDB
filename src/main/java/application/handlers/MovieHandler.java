@@ -1,5 +1,12 @@
 package application.handlers;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Component;
+
 import application.models.response.*;
 import domain.actor.models.Actor;
 import domain.actor.services.ActorService;
@@ -17,12 +24,6 @@ import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.services.UserService;
 import infrastructure.BaseEntity;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class MovieHandler {

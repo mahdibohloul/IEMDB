@@ -1,13 +1,13 @@
 package application.models.response;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Objects;
+
 import domain.movie.models.Movie;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter

@@ -1,9 +1,10 @@
 package infrastructure.workcontext.services;
 
+import org.springframework.stereotype.Service;
+
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.services.UserService;
-import org.springframework.stereotype.Service;
 
 @Service
 public class WorkContextImpl implements WorkContext {

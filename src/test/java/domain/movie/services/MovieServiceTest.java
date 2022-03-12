@@ -1,5 +1,16 @@
 package domain.movie.services;
 
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.services.ActorService;
 import domain.comment.models.Comment;
@@ -10,18 +21,8 @@ import domain.movie.repositories.MovieRepository;
 import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-
-import java.util.List;
 
 
 public class MovieServiceTest {

@@ -1,17 +1,18 @@
 package framework.router.servlet.handlers;
 
-import application.controllers.UserController;
-import application.models.request.RemoveUserWatchListRequestModel;
-import application.models.response.GenericResponseModel;
-import infrastructure.startup.ApplicationStartup;
-import infrastructure.workcontext.services.WorkContext;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import application.controllers.UserController;
+import application.models.request.RemoveUserWatchListRequestModel;
+import application.models.response.GenericResponseModel;
+import infrastructure.startup.ApplicationStartup;
+import infrastructure.workcontext.services.WorkContext;
 
 @WebServlet("/watchList/remove")
 public class UserWatchListRemoveServlet extends HttpServlet {

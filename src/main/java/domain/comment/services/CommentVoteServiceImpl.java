@@ -1,14 +1,15 @@
 package domain.comment.services;
 
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.comment.exceptions.InvalidVoteValueException;
 import domain.comment.models.Comment;
 import domain.comment.models.CommentVote;
 import domain.comment.repositories.CommentVoteRepository;
 import domain.comment.valueobjects.VoteType;
 import domain.user.models.User;
-import org.springframework.stereotype.Service;
-
-import java.util.stream.Stream;
 
 @Service
 public class CommentVoteServiceImpl implements CommentVoteService {

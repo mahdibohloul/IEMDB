@@ -1,19 +1,20 @@
 package framework.router.servlet.handlers;
 
-import application.controllers.MovieController;
-import application.models.response.MoviesResponseModel;
-import domain.movie.valueobjects.MovieSearchModel;
-import domain.movie.valueobjects.MovieSortOption;
-import infrastructure.startup.ApplicationStartup;
-import infrastructure.workcontext.services.WorkContext;
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
+
+import application.controllers.MovieController;
+import application.models.response.MoviesResponseModel;
+import domain.movie.valueobjects.MovieSearchModel;
+import domain.movie.valueobjects.MovieSortOption;
+import infrastructure.startup.ApplicationStartup;
+import infrastructure.workcontext.services.WorkContext;
 
 @WebServlet("/movies")
 public class MoviesServlet extends HttpServlet {

@@ -1,5 +1,10 @@
 package domain.movie.services;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.services.ActorService;
 import domain.comment.models.Comment;
@@ -11,10 +16,6 @@ import domain.movie.repositories.MovieRepository;
 import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class MovieServiceImpl implements MovieService {

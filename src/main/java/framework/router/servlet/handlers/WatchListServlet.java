@@ -1,6 +1,15 @@
 package framework.router.servlet.handlers;
 
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import application.controllers.UserController;
 import application.models.request.GetUserRecommendedMoviesRequestModel;
 import application.models.request.GetUserWatchListRequestModel;
@@ -9,14 +18,6 @@ import application.models.response.GetUserWatchListResponseModel;
 import application.models.response.MovieResponseModel;
 import infrastructure.startup.ApplicationStartup;
 import infrastructure.workcontext.services.WorkContext;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/watchList")
 public class WatchListServlet extends HttpServlet {

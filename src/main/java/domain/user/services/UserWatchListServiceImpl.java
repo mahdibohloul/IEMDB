@@ -1,5 +1,15 @@
 package domain.user.services;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
 import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieRateService;
@@ -10,15 +20,6 @@ import domain.user.exceptions.MovieAlreadyExistsException;
 import domain.user.models.User;
 import domain.user.models.UserWatchList;
 import domain.user.repositories.UserWatchListRepository;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Service
 public class UserWatchListServiceImpl implements UserWatchListService {

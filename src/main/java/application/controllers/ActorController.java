@@ -1,5 +1,13 @@
 package application.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Controller;
+
 import application.models.request.AddActorRequestModel;
 import application.models.request.GetActorByIdRequestModel;
 import application.models.response.ActorDetailResponseModel;
@@ -13,13 +21,6 @@ import domain.movie.services.MovieRateService;
 import domain.movie.services.MovieService;
 import domain.movie.valueobjects.MovieSearchModel;
 import framework.router.commandline.exceptions.InvalidCommandException;
-import org.springframework.stereotype.Controller;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class ActorController {

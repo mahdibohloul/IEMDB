@@ -1,16 +1,18 @@
 package framework.interceptors.filters;
 
 
-import domain.user.exceptions.UserNotFoundException;
-import infrastructure.startup.ApplicationStartup;
-import infrastructure.workcontext.services.WorkContext;
-import org.springframework.core.annotation.Order;
+import java.io.IOException;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.springframework.core.annotation.Order;
+
+import domain.user.exceptions.UserNotFoundException;
+import infrastructure.startup.ApplicationStartup;
+import infrastructure.workcontext.services.WorkContext;
 
 @Order(1)
 @WebFilter(urlPatterns = "/*")

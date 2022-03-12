@@ -1,8 +1,9 @@
 package infrastructure.runner;
 
-import infrastructure.startup.ApplicationStartup;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import infrastructure.startup.ApplicationStartup;
 
 @Component("ApplicationTomcatRunner")
 @Profile("tomcat")

@@ -1,5 +1,13 @@
 package framework.router.servlet.handlers;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import application.controllers.MovieController;
 import application.controllers.UserController;
 import application.models.request.AddCommentRequestModel;
@@ -10,13 +18,6 @@ import application.models.response.GenericResponseModel;
 import application.models.response.MovieDetailResponseModel;
 import infrastructure.startup.ApplicationStartup;
 import infrastructure.workcontext.services.WorkContext;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @WebServlet("/movies/*")
 public class MovieServlet extends HttpServlet {
