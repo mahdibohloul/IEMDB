@@ -1,22 +1,11 @@
 package domain.movie.repositories;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import domain.movie.models.Movie;
+import domain.movie.valueobjects.MovieSearchModel;
 import infrastructure.store.InMemoryRepository;
 
+import java.util.stream.Stream;
+
 public interface MovieRepository extends InMemoryRepository<Movie, Integer> {
-    Stream<Movie> searchMovies(List<Integer> ids,
-            List<String> names,
-            List<String> directors,
-            List<String> writers,
-            List<String> genres,
-            List<Integer> cast,
-            Double imdbRateGt,
-            Double imdbRateLt,
-            Integer ageLimitGt,
-            Integer ageLimitLt,
-            Integer yearGt,
-            Integer yearLt);
+    Stream<Movie> searchMovies(MovieSearchModel searchModel);
 }

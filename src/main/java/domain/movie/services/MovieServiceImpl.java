@@ -1,10 +1,5 @@
 package domain.movie.services;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import org.springframework.stereotype.Service;
-
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.actor.services.ActorService;
 import domain.comment.models.Comment;
@@ -13,8 +8,13 @@ import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.models.MovieComment;
 import domain.movie.repositories.MovieRepository;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -56,26 +56,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Stream<Movie> searchMovies(List<Integer> ids,
-            List<String> names,
-            List<String> directors,
-            List<String> writers,
-            List<String> genres,
-            List<Integer> cast,
-            Double imdbRateGt,
-            Double imdbRateLt,
-            Integer ageLimitGt,
-            Integer ageLimitLt,
-            Integer yearGt,
-            Integer yearLt) {
-        return movieRepository.searchMovies(ids,
-                names,
-                directors,
-                writers,
-                genres,
-                cast,
-                imdbRateGt, imdbRateLt,
-                ageLimitGt, ageLimitLt, yearGt, yearLt);
+    public Stream<Movie> searchMovies(MovieSearchModel searchModel) {
+        return movieRepository.searchMovies(searchModel);
     }
 
     private Movie updateMovie(Movie movie) {

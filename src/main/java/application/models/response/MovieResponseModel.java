@@ -1,14 +1,15 @@
 package application.models.response;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import domain.actor.models.Actor;
 import domain.movie.models.Movie;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -25,6 +26,8 @@ public class MovieResponseModel {
     @JsonIgnore
     private Date releaseDate;
     @JsonIgnore
+    private String releaseDateString;
+    @JsonIgnore
     private List<String> writers;
     @JsonIgnore
     private Double imdbRate;
@@ -39,8 +42,9 @@ public class MovieResponseModel {
         this.summary = movie.getSummary();
         this.director = movie.getDirector();
         this.genres = movie.getGenres();
-        this.rating = rating;
+        this.rating = Objects.requireNonNullElse(rating, 0.0);
         this.releaseDate = movie.getReleaseDate();
+        this.releaseDateString = new SimpleDateFormat("yyyy-MM-dd").format(this.releaseDate);
         this.cast = cast.stream().map(Actor::getName).toList();
         this.writers = movie.getWriters();
         this.imdbRate = movie.getImdbRate();

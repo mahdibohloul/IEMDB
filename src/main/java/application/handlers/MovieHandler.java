@@ -1,12 +1,5 @@
 package application.handlers;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.stereotype.Component;
-
 import application.models.response.*;
 import domain.actor.models.Actor;
 import domain.actor.services.ActorService;
@@ -19,10 +12,17 @@ import domain.movie.models.Movie;
 import domain.movie.models.MovieComment;
 import domain.movie.services.MovieRateService;
 import domain.movie.services.MovieService;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.services.UserService;
 import infrastructure.BaseEntity;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class MovieHandler {
@@ -50,18 +50,8 @@ public class MovieHandler {
         return new MovieResponseModel(movie, movieRate, actorStream.toList());
     }
 
-    public MoviesResponseModel getMovieList(
-            List<Integer> ids,
-            List<String> names,
-            List<String> directors,
-            List<Integer> cast,
-            List<String> writers, List<String> genres,
-            Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt, Integer yearGt,
-            Integer yearLt) {
-        Stream<Movie> movieStream =
-                movieService.searchMovies(ids, names, directors, writers, genres, cast, imdbRateGt, imdbRateLt,
-                        ageLimitGt,
-                        ageLimitLt, yearGt, yearLt);
+    public MoviesResponseModel getMovieList(MovieSearchModel searchModel) {
+        Stream<Movie> movieStream = movieService.searchMovies(searchModel);
         MoviesResponseModel movieList = new MoviesResponseModel();
         List<MovieResponseModel> movieResponseModels =
                 movieStream.map(this::getMovie).toList();
