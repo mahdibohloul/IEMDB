@@ -1,16 +1,7 @@
 package application.controllers;
 
-import java.text.ParseException;
-import java.util.List;
-import java.util.stream.Stream;
-
-import org.springframework.stereotype.Controller;
-
 import application.handlers.MovieHandler;
-import application.models.request.AddUserRequestModel;
-import application.models.request.AddUserWatchListRequestModel;
-import application.models.request.GetUserWatchListRequestModel;
-import application.models.request.RemoveUserWatchListRequestModel;
+import application.models.request.*;
 import application.models.response.GenericResponseModel;
 import application.models.response.GetUserWatchListResponseModel;
 import application.models.response.MovieResponseModel;
@@ -18,12 +9,18 @@ import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieService;
 import domain.user.exceptions.DuplicateUserEmailException;
+import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.models.UserWatchList;
 import domain.user.services.UserService;
 import domain.user.services.UserWatchListService;
 import framework.router.commandline.exceptions.InvalidCommandException;
 import infrastructure.exceptions.IemdbException;
+import org.springframework.stereotype.Controller;
+
+import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Controller
 public class UserController {
@@ -75,6 +72,19 @@ public class UserController {
             userWatchListService.removeFromWatchList(user, removeUserWatchListRequestModel.getMovieId());
             response.setSuccessfulResponse("movie removed from watchlist successfully");
         } catch (IemdbException e) {
+            response.setUnsuccessfulResponse(e.toString());
+        }
+        return response;
+    }
+
+    public GenericResponseModel getUserRecommendedMovies(GetUserRecommendedMoviesRequestModel requestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            User user = userService.findUserByEmail(requestModel.getUserEmail());
+            List<Movie> movies = userWatchListService.getRecommendedMovie(user, requestModel.getCount()).toList();
+            List<MovieResponseModel> movieResponseModels = movies.stream().map(movieHandler::getMovie).toList();
+            response.setSuccessfulResponse(movieResponseModels);
+        } catch (UserNotFoundException e) {
             response.setUnsuccessfulResponse(e.toString());
         }
         return response;
