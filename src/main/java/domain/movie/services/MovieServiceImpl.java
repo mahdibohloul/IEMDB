@@ -13,6 +13,7 @@ import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.models.MovieComment;
 import domain.movie.repositories.MovieRepository;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
 
@@ -56,12 +57,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Stream<Movie> searchMovies(List<Integer> ids,
-            List<String> names, List<String> directors, List<String> writers,
-            List<String> genres, Double imdbRateGt, Double imdbRateLt,
-            Integer ageLimitGt, Integer ageLimitLt) {
-        return movieRepository.searchMovies(ids, names, directors, writers, genres, imdbRateGt, imdbRateLt, ageLimitGt,
-                ageLimitLt);
+    public Stream<Movie> searchMovies(MovieSearchModel searchModel) {
+        return movieRepository.searchMovies(searchModel);
     }
 
     private Movie updateMovie(Movie movie) {

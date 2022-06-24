@@ -15,6 +15,7 @@ import domain.actor.exceptions.ActorNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieScoreService;
 import domain.movie.services.MovieService;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import domain.user.services.UserService;
 import framework.router.commandline.exceptions.InvalidCommandException;
@@ -36,7 +37,7 @@ public class MovieController {
         this.movieHandler = movieHandler;
     }
 
-    public GenericResponseModel addMove(AddMovieRequestModel addMovieRequestModel) {
+    public GenericResponseModel addMovie(AddMovieRequestModel addMovieRequestModel) {
         GenericResponseModel responseModel = new GenericResponseModel();
         try {
             Movie movie = addMovieRequestModel.toMovie();
@@ -77,7 +78,8 @@ public class MovieController {
     }
 
     public MoviesResponseModel getMoviesList() {
-        return movieHandler.getMovieList(null, null, null, null, null, null, null, null, null);
+
+        return movieHandler.getMovieList(new MovieSearchModel());
     }
 
     public GenericResponseModel getMovieById(GetMovieByIdRequestModel getMovieByIdRequestModel) {
@@ -92,9 +94,20 @@ public class MovieController {
     }
 
     public MoviesResponseModel getMoviesByGenre(GetMoviesByGenreRequestModel getMoviesByGenreRequestModel) {
-        return movieHandler.getMovieList(null, null, null, null,
-                List.of(getMoviesByGenreRequestModel.getGenre()), null,
-                null, null, null);
+        MovieSearchModel searchModel = new MovieSearchModel();
+        searchModel.setGenres(List.of(getMoviesByGenreRequestModel.getGenre()));
+        return movieHandler.getMovieList(searchModel);
+    }
+
+    public MoviesResponseModel getMoviesByYear(GetMoviesByYearRequestModel getMoviesByYearRequestModel) {
+        MovieSearchModel searchModel = new MovieSearchModel();
+        searchModel.setYearLt(getMoviesByYearRequestModel.getEndYear());
+        searchModel.setYearGt(getMoviesByYearRequestModel.getStartYear());
+        return movieHandler.getMovieList(searchModel);
+    }
+
+    public MoviesResponseModel searchMovies(MovieSearchModel searchModel) {
+        return movieHandler.getMovieList(searchModel);
     }
 
 

@@ -1,12 +1,16 @@
 package domain.movie.repositories;
 
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Repository;
 
 import domain.movie.models.Movie;
+import domain.movie.valueobjects.MovieSearchModel;
 import infrastructure.store.InMemoryStore;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 @Repository
 public class MovieRepositoryImpl implements MovieRepository {
@@ -39,48 +43,81 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Stream<Movie> searchMovies(List<Integer> ids, List<String> names, List<String> directors,
-            List<String> writers, List<String> genres, Double imdbRateGt, Double imdbRateLt,
-            Integer ageLimitGt, Integer ageLimitLt) {
+    public Stream<Movie> searchMovies(MovieSearchModel searchModel) {
         Stream<Movie> movies = store.getAll().stream();
-        if (ids != null) {
-            movies = movies.filter(movie -> ids.contains(movie.getId()));
+        if (searchModel.getIds() != null) {
+            movies = movies.filter(movie -> searchModel.getIds().contains(movie.getId()));
         }
-        if (names != null) {
-            movies = movies.filter(movie -> names.stream().anyMatch(name -> movie.getName().equalsIgnoreCase(name)));
-        }
-        if (directors != null) {
+        if (searchModel.getNames() != null) {
             movies = movies.filter(
-                    movie -> directors.stream().anyMatch(director -> movie.getDirector().equalsIgnoreCase(director)));
+                    movie -> searchModel.getNames().stream()
+                            .anyMatch(name -> movie.getName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(
+                                    Locale.ROOT))));
         }
-        if (writers != null) {
+        if (searchModel.getDirectors() != null) {
             movies = movies.filter(
-                    movie -> writers.stream()
-                            .anyMatch(writer -> movie.getWriters().stream().anyMatch(mw -> writers.stream().anyMatch(
-                                    mw::equalsIgnoreCase)))
+                    movie -> searchModel.getDirectors().stream()
+                            .anyMatch(director -> movie.getDirector().equalsIgnoreCase(director)));
+        }
+        if (searchModel.getWriters() != null) {
+            movies = movies.filter(
+                    movie -> movie.getWriters().stream()
+                            .anyMatch(mw -> searchModel.getWriters().stream().anyMatch(mw::equalsIgnoreCase)));
+        }
+        if (searchModel.getGenres() != null) {
+            movies = movies.filter(
+                    movie -> movie.getGenres().stream()
+                            .anyMatch(mg -> searchModel.getGenres().stream().anyMatch(mg::equalsIgnoreCase))
             );
         }
-        if (genres != null) {
+        if (searchModel.getCast() != null) {
             movies = movies.filter(
-                    movie -> genres.stream()
-                            .anyMatch(genre -> movie.getGenres().stream().anyMatch(mw -> genres.stream().anyMatch(
-                                    mw::equalsIgnoreCase)))
+                    movie -> movie.getCast().stream().anyMatch(searchModel.getCast()::contains)
             );
         }
-        if (imdbRateGt != null) {
-            movies = movies.filter(movie -> movie.getImdbRate() > imdbRateGt);
+        if (searchModel.getImdbRateGt() != null) {
+            movies = movies.filter(movie -> movie.getImdbRate() > searchModel.getImdbRateGt());
         }
-        if (imdbRateLt != null) {
-            movies = movies.filter(movie -> movie.getImdbRate() < imdbRateLt);
+        if (searchModel.getImdbRateLt() != null) {
+            movies = movies.filter(movie -> movie.getImdbRate() < searchModel.getImdbRateLt());
         }
-        if (ageLimitGt != null) {
-            movies = movies.filter(movie -> movie.getAgeLimit() > ageLimitGt);
+        if (searchModel.getAgeLimitGt() != null) {
+            movies = movies.filter(movie -> movie.getAgeLimit() > searchModel.getAgeLimitGt());
         }
-        if (ageLimitLt != null) {
-            movies = movies.filter(movie -> movie.getAgeLimit() < ageLimitLt);
+        if (searchModel.getAgeLimitLt() != null) {
+            movies = movies.filter(movie -> movie.getAgeLimit() < searchModel.getAgeLimitLt());
         }
+        if (searchModel.getYearGt() != null) {
+            movies = movies.filter(movie -> {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(movie.getReleaseDate());
+                return calendar.get(Calendar.YEAR) > searchModel.getYearGt();
+            });
+        }
+        if (searchModel.getYearLt() != null) {
+            movies = movies.filter(movie -> getYear(movie.getReleaseDate()) < searchModel.getYearLt());
+        }
+        Comparator<Movie> movieComparable = null;
+        switch (searchModel.getSortOption()) {
+            case IMDB -> movieComparable = Comparator.comparing(Movie::getImdbRate);
+            case RELEASE_DATE_YEAR -> movieComparable = Comparator.comparing(movie -> getYear(movie.getReleaseDate()));
+        }
+
+        switch (searchModel.getSortOrder()) {
+            case ASCENDING -> {
+            }
+            case DESCENDING -> movieComparable = movieComparable.reversed();
+        }
+
+        movies = movies.sorted(movieComparable);
 
 
         return movies;
+    }
+
+    private Integer getYear(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
     }
 }

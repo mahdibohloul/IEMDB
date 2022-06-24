@@ -18,6 +18,7 @@ import domain.comment.services.CommentService;
 import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.repositories.MovieRepository;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 import infrastructure.time.services.TimeService;
 import uk.co.jemos.podam.api.PodamFactory;
@@ -90,11 +91,10 @@ public class MovieServiceTest {
     void should_get_movies_with_success() {
         List<Movie> movies = podamFactory.manufacturePojo(List.class, Movie.class);
         List<Integer> ids = movies.stream().map(Movie::getId).toList();
-        Mockito.when(movieRepository.searchMovies(
-                ids, null, null, null, null, null, null, null, null
-        )).thenReturn(movies.stream());
-        List<Movie> searchedMovies = movieService.searchMovies(ids, null, null,
-                null, null, null, null, null, null).toList();
+        MovieSearchModel searchModel = new MovieSearchModel();
+        searchModel.setIds(ids);
+        Mockito.when(movieRepository.searchMovies(searchModel)).thenReturn(movies.stream());
+        List<Movie> searchedMovies = movieService.searchMovies(searchModel).toList();
         Assertions.assertArrayEquals(searchedMovies.toArray(), movies.toArray());
     }
 }

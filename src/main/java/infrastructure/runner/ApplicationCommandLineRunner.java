@@ -2,11 +2,14 @@ package infrastructure.runner;
 
 import java.util.Scanner;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import framework.router.commandline.CommandLineRouter;
+import infrastructure.startup.ApplicationStartup;
 
 @Service(value = "ApplicationCommandLineRunner")
+@Profile("cli")
 public class ApplicationCommandLineRunner implements ApplicationRunner {
     private final CommandLineRouter commandLineRouter;
 
@@ -24,5 +27,10 @@ public class ApplicationCommandLineRunner implements ApplicationRunner {
                 break;
             System.out.println(commandLineRouter.route(command));
         }
+    }
+
+    @Override
+    public void stop() {
+        ApplicationStartup.stop();
     }
 }

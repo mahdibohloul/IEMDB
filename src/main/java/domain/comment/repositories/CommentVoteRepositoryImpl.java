@@ -1,10 +1,11 @@
 package domain.comment.repositories;
 
-import domain.comment.models.CommentVote;
-import infrastructure.store.InMemoryStore;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.stream.Stream;
+import domain.comment.models.CommentVote;
+import infrastructure.store.InMemoryStore;
 
 @Repository
 public class CommentVoteRepositoryImpl implements CommentVoteRepository {
@@ -39,5 +40,12 @@ public class CommentVoteRepositoryImpl implements CommentVoteRepository {
     @Override
     public Stream<CommentVote> findAllByCommentId(Integer commentId) {
         return store.getAll().stream().filter(commentVote -> commentVote.getCommentId().equals(commentId));
+    }
+
+    @Override
+    public CommentVote findByCommentIdAndUserEmail(Integer commentId, String userEmail) {
+        return store.getAll().stream().filter(commentVote -> commentVote.getCommentId().equals(commentId) &&
+                                                             commentVote.getUserEmail().equals(userEmail)).findFirst()
+                .orElse(null);
     }
 }

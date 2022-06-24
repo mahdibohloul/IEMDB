@@ -1,43 +1,76 @@
 package infrastructure.startup;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import infrastructure.AppConfig;
 import infrastructure.beans.ComponentsConfiguration;
+import infrastructure.dataprovider.services.DataProvider;
 import infrastructure.runner.ApplicationRunner;
 
-//TODO make this class a singleton
 public class ApplicationStartup {
-    private final AnnotationConfigApplicationContext context;
+    private static AnnotationConfigApplicationContext context;
 
-    public ApplicationStartup() {
-        context = new AnnotationConfigApplicationContext();
-    }
-
-    public void start() {
+    public static void start() {
         registerComponents();
-        context.refresh();
+        setEnvironment();
+        getContext().refresh();
     }
 
-    public void run(ApplicationRunner applicationRunner) {
+    private ApplicationStartup() {
+    }
+
+    public static void run(ApplicationRunner applicationRunner) {
+        AppConfig appConfig = getContext().getBean(AppConfig.class);
+        if (appConfig.getPopulateDatabase()) {
+            populateDatabase();
+        }
         applicationRunner.run();
-        stop();
+        applicationRunner.stop();
     }
 
-    public void run(String applicationRunnerName) {
-        ApplicationRunner applicationRunner = (ApplicationRunner) context.getBean(applicationRunnerName);
+    public static void run(String applicationRunnerName) {
+        ApplicationRunner applicationRunner = (ApplicationRunner) getContext().getBean(applicationRunnerName);
         run(applicationRunner);
     }
 
-    public void stop() {
-        context.close();
+    public static void stop() {
+        getContext().close();
     }
 
-    public AnnotationConfigApplicationContext getContext() {
+    public static AnnotationConfigApplicationContext getContext() {
+        if (context == null) {
+            context = new AnnotationConfigApplicationContext();
+        }
         return context;
     }
 
-    private void registerComponents() {
-        context.register(ComponentsConfiguration.class);
+    private static void registerComponents() {
+        getContext().register(ComponentsConfiguration.class);
     }
 
+    private static void populateDatabase() {
+        long startTime = System.currentTimeMillis();
+        Logger logger = LoggerFactory.getLogger(ApplicationStartup.class.getSimpleName());
+        logger.info("Database population started");
+        context.getBeansOfType(DataProvider.class).values().stream()
+                .sorted(AnnotationAwareOrderComparator.INSTANCE)
+                .forEach(dataProvider -> {
+                    try {
+                        dataProvider.populateData(dataProvider.provide());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+        long endTime = System.currentTimeMillis();
+        logger.info("Database populated in " + (endTime - startTime) + " ms");
+    }
+
+    private static void setEnvironment() {
+        getContext().getEnvironment().addActiveProfile("tomcat");
+    }
 }

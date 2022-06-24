@@ -7,10 +7,7 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Controller;
 
 import application.handlers.MovieHandler;
-import application.models.request.AddUserWatchListRequestModel;
-import application.models.request.GetUserWatchListRequestModel;
-import application.models.request.RemoveUserWatchListRequestModel;
-import application.models.request.UserRequestModel;
+import application.models.request.*;
 import application.models.response.GenericResponseModel;
 import application.models.response.GetUserWatchListResponseModel;
 import application.models.response.MovieResponseModel;
@@ -18,6 +15,7 @@ import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
 import domain.movie.services.MovieService;
 import domain.user.exceptions.DuplicateUserEmailException;
+import domain.user.exceptions.UserNotFoundException;
 import domain.user.models.User;
 import domain.user.models.UserWatchList;
 import domain.user.services.UserService;
@@ -41,10 +39,10 @@ public class UserController {
         this.movieHandler = movieHandler;
     }
 
-    public GenericResponseModel addUser(UserRequestModel userRequestModel) {
+    public GenericResponseModel addUser(AddUserRequestModel addUserRequestModel) {
         GenericResponseModel response = new GenericResponseModel();
         try {
-            User user = userRequestModel.toUser();
+            User user = addUserRequestModel.toUser();
             userService.insertUser(user);
             response.setSuccessfulResponse("user added successfully");
         } catch (ParseException e) {
@@ -80,6 +78,19 @@ public class UserController {
         return response;
     }
 
+    public GenericResponseModel getUserRecommendedMovies(GetUserRecommendedMoviesRequestModel requestModel) {
+        GenericResponseModel response = new GenericResponseModel();
+        try {
+            User user = userService.findUserByEmail(requestModel.getUserEmail());
+            List<Movie> movies = userWatchListService.getRecommendedMovie(user, requestModel.getCount()).toList();
+            List<MovieResponseModel> movieResponseModels = movies.stream().map(movieHandler::getMovie).toList();
+            response.setSuccessfulResponse(movieResponseModels);
+        } catch (UserNotFoundException e) {
+            response.setUnsuccessfulResponse(e.toString());
+        }
+        return response;
+    }
+
     public GenericResponseModel getUserWatchList(GetUserWatchListRequestModel getUserWatchListRequestModel) {
         GenericResponseModel response = new GenericResponseModel();
         try {
@@ -96,6 +107,9 @@ public class UserController {
                     }).map(
                             movieHandler::getMovie).toList();
             getUserWatchListResponseModel.setWatchList(movieResponseModels);
+            getUserWatchListResponseModel.setUserEmail(user.getEmail());
+            getUserWatchListResponseModel.setUserName(user.getName());
+            getUserWatchListResponseModel.setUserNickname(user.getNickname());
             response.setSuccessfulResponse(getUserWatchListResponseModel);
         } catch (IemdbException e) {
             response.setUnsuccessfulResponse(e.toString());

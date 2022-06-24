@@ -1,11 +1,11 @@
 package domain.movie.services;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import domain.actor.exceptions.ActorNotFoundException;
 import domain.movie.exceptions.MovieNotFoundException;
 import domain.movie.models.Movie;
+import domain.movie.valueobjects.MovieSearchModel;
 import domain.user.models.User;
 
 public interface MovieService {
@@ -15,7 +15,5 @@ public interface MovieService {
 
     Integer addComment(Movie movie, String text, User user) throws MovieNotFoundException;
 
-    Stream<Movie> searchMovies(List<Integer> ids, List<String> names, List<String> directors, List<String> writers,
-            List<String> genres,
-            Double imdbRateGt, Double imdbRateLt, Integer ageLimitGt, Integer ageLimitLt);
+    Stream<Movie> searchMovies(MovieSearchModel searchModel);
 }
